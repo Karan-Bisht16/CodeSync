@@ -3,11 +3,13 @@ import Client from "./Client";
 import Editor from "./Editor";
 import { initSocket } from "../Socket";
 import { ACTIONS } from "../Actions";
+import Whiteboard from "./Whiteboard";
 import {
   useNavigate,
   useLocation,
   Navigate,
   useParams,
+  Link,
 } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -19,7 +21,7 @@ function EditorPage() {
   const reactNavigator = useNavigate();
   const { roomId } = useParams();
   const [clients, setClients] = useState([]);
-
+  const [showWhiteboard, setShowWhiteboard] = useState(false);
   useEffect(() => {
     const init = async () => {
       socketRef.current = await initSocket();
@@ -93,6 +95,10 @@ function EditorPage() {
   function leaveRoom() {
     reactNavigator("/");
   }
+  const toggleWhiteboard = () => {
+    window.open(`/whiteboard/${roomId}`, "_blank");
+  };
+ 
 
   if (!location.state) {
     return <Navigate to="/" />;
@@ -172,7 +178,7 @@ function EditorPage() {
 
   const sendMessage = () => {
     if (document.getElementById("inputBox").value === "") return;
-    var message = `> ${location.state.username}:\n${document.getElementById("inputBox").value
+    var message = `>${location.state.username}:\n${document.getElementById("inputBox").value
       }\n`;
     const chatWindow = document.getElementById("chatWindow");
     var currText = chatWindow.value;
@@ -210,6 +216,9 @@ function EditorPage() {
             ))}
           </div>
         </div>
+        <button className="btn whiteboardBtn" onClick={toggleWhiteboard}>
+          Go to Whiteboard
+        </button>
         <label>
           Select Language:
           <select id="languageOptions" className="seLang" defaultValue="17">
@@ -243,13 +252,15 @@ function EditorPage() {
       </div>
 
       <div className="editorWrap">
-        <Editor
-          socketRef={socketRef}
-          roomId={roomId}
-          onCodeChange={(code) => {
-            codeRef.current = code;
-          }}
-        />
+       
+          <Editor
+            socketRef={socketRef}
+            roomId={roomId}
+            onCodeChange={(code) => {
+              codeRef.current = code;
+            }}
+          />
+      
         <div className="IO-container">
           <label
             id="inputLabel"

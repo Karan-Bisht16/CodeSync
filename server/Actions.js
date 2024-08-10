@@ -8,6 +8,7 @@ const ACTIONS = {
   SYNC_CODE: "sync-code",
   LEAVE: "leave",
   SEND_MESSAGE: "send-message",
+  WHITEBOARD_UPDATE: 'WHITEBOARD_UPDATE',
 };
 
 module.exports = ACTIONS;

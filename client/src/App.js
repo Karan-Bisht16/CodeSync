@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import EditorPage from "./components/EditorPage";
 import { Toaster } from "react-hot-toast";
+import Whiteboard from "./components/Whiteboard";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/editor/:roomId" element={<EditorPage />}></Route>
+          <Route path="/whiteboard/:roomId" element={<Whiteboard/>} />
         </Routes>
       </BrowserRouter>
     </>
