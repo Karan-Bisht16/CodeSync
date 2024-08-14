@@ -1,0 +1,492 @@
+DesktopOne.js
+import { useCallback } from "react";
+import FrameComponent from "../components/FrameComponent";
+
+const DesktopOne = () => {
+  const onGroupButtonClick = useCallback(() => {
+    // Please sync "Desktop - 2" to the project
+  }, []);
+
+  return (
+    <div className="w-full h-[128rem] relative bg-gray overflow-hidden leading-[normal] tracking-[normal] mq450:h-auto mq450:min-h-[1024]">
+      <main className="absolute top-[6.625rem] left-[9.75rem] shadow-[2px_30px_75px_#3c5665] bg-darkslategray-200 border-cadetblue-200 border-[1px] border-solid box-border w-[160.25rem] flex flex-col items-start justify-start pt-[2.375rem] px-[3.375rem] pb-[3.875rem] gap-[2.5rem] max-w-full">
+        <div className="w-[160.25rem] h-[94rem] relative shadow-[2px_30px_75px_#3c5665] bg-darkslategray-200 border-cadetblue-200 border-[1px] border-solid box-border hidden max-w-full" />
+        <FrameComponent />
+        <section className="w-[152.188rem] flex flex-row items-start justify-start gap-[5.75rem] max-w-full text-left text-[8.875rem] text-white font-black-ops-one mq1025:flex-wrap">
+          <div className="w-[67.25rem] flex flex-col items-start justify-start pt-[5.25rem] px-[0rem] pb-[0rem] box-border min-w-[67.25rem] max-w-full mq725:min-w-full mq1025:flex-1">
+            <div className="self-stretch h-[64.85rem] flex flex-col items-start justify-start pt-[0rem] px-[0rem] pb-[40.85rem] box-border gap-[29.362rem] max-w-full">
+              <div className="self-stretch flex flex-row items-start justify-start relative max-w-full shrink-0">
+                <h1 className="m-0 h-[24rem] flex-1 relative text-inherit font-normal font-[inherit] inline-block [text-shadow:5px_10px_15px_#5bb1c5] max-w-full z-[2] mq450:text-[5.375rem] mq975:text-[7.125rem]">{`Code Collaboration `}</h1>
+                <div className="w-[63.5rem] absolute !m-[0] bottom-[-21.625rem] left-[1.625rem] text-[4rem] font-blinker inline-block z-[3] mq450:text-[2.375rem] mq975:text-[3.25rem]">
+                  For seamless code collaboration in virtual rooms, create or
+                  join rooms and collaborate in real time, with code
+                  highlighting and customizable editors enhancing your
+                  experience.
+                </div>
+              </div>
+              <div className="flex flex-row items-start justify-start py-[0rem] px-[1.5rem] box-border max-w-full">
+                <button
+                  className="cursor-pointer border-darkslategray-100 border-[3px] border-solid py-[2.375rem] px-[9.875rem] bg-[transparent] [background:linear-gradient(90deg,_#5bb1c5_1%,_#408290_34%,_#346b77_52.5%,_#2b5660_70%,_#173035_92%)] box-border flex flex-row items-start justify-start whitespace-nowrap max-w-full z-[1] hover:bg-cadetblue-300 hover:border-cadetblue-100 hover:border-[3px] hover:border-solid hover:box-border"
+                  onClick={onGroupButtonClick}
+                >
+                  <div className="h-[11.488rem] w-[43.613rem] relative [background:linear-gradient(90deg,_#5bb1c5_1%,_#408290_34%,_#346b77_52.5%,_#2b5660_70%,_#173035_92%)] border-darkslategray-100 border-[3px] border-solid box-border hidden max-w-full" />
+                  <div className="relative text-[5rem] font-blinker text-white text-left z-[1]">
+                    Get Started
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="h-[77.5rem] flex-1 relative max-w-full min-w-[51.375rem] z-[2] flex items-center justify-center">
+            <img
+              className="h-full flex-1 overflow-hidden z-[2] object-contain absolute left-[0rem] top-[1rem] w-full [transform:scale(1.21)] mq725:min-w-full"
+              alt=""
+              src="/8a95ee1cc2c356069886689c4ee31592-1@2x.png"
+            />
+          </div>
+        </section>
+      </main>
+      <img
+        className="absolute top-[12.625rem] left-[161.663rem] w-[28.4rem] h-[112.663rem] z-[3]"
+        loading="lazy"
+        alt=""
+        src="/vector-1.svg"
+      />
+    </div>
+  );
+};
+
+export default DesktopOne;
+
+FrameComponent.js
+import { useCallback } from "react";
+import PropTypes from "prop-types";
+
+const FrameComponent = ({ className = "" }) => {
+  const onGroupContainerClick = useCallback(() => {
+    // Please sync "Desktop - 2" to the project
+  }, []);
+
+  return (
+    <div
+      className={`w-[150.875rem] flex flex-row items-start justify-between gap-[2.5rem] max-w-full text-left text-[4rem] text-white font-blinker mq450:flex-wrap ${className}`}
+    >
+      <b className="w-[23.5rem] relative inline-block shrink-0 z-[2] mq450:text-[2.375rem] mq975:text-[3.25rem]">{`< Code Sync >`}</b>
+      <div className="w-[18rem] flex flex-col items-start justify-start pt-[0.25rem] px-[0rem] pb-[0rem] box-border text-[4.75rem]">
+        <div
+          className="self-stretch flex flex-row items-start justify-start py-[0.375rem] px-[2.875rem] relative cursor-pointer z-[2]"
+          onClick={onGroupContainerClick}
+        >
+          <div className="h-full w-full absolute !m-[0] top-[0rem] right-[0rem] bottom-[0rem] left-[0rem] rounded-3xs bg-darkslategray-300 border-whitesmoke border-[1px] border-solid box-border" />
+          <a className="[text-decoration:none] h-[6.5rem] flex-1 relative text-[inherit] inline-block z-[1] mq450:text-[2.875rem] mq975:text-[3.75rem]">
+            JOIN
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+FrameComponent.propTypes = {
+  className: PropTypes.string,
+};
+
+export default FrameComponent;
+
+global.css
+@import url("https://fonts.googleapis.com/css2?family=Blinker:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One:wght@400&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  font-size: 8;
+}
+body {
+  @apply leading-[normal] m-0;
+}
+*,
+::before,
+::after {
+  border-width: 0;
+}
+
+tailwind.config.js
+module.exports = {
+    content: ["./src/**/*.{js,jsx,ts,tsx}"],
+    theme: {
+      extend: {
+        colors: {
+          gray: "#1e2025",
+          darkslategray: {
+            "100": "#346b77",
+            "200": "#29343d",
+            "300": "rgba(60, 86, 101, 0.5)",
+          },
+          cadetblue: {
+            "100": "#5c919e",
+            "200": "#478585",
+            "300": "rgba(92, 145, 158, 0.09)",
+          },
+          white: "#fff",
+          whitesmoke: "#f5f5f5",
+        },
+        spacing: {},
+        fontFamily: {
+          blinker: "Blinker",
+          "black-ops-one": "'Black Ops One'",
+        },
+        borderRadius: {
+          "3xs": "10px",
+        },
+      },
+      fontSize: {
+        "13xl": "4rem",
+        lgi: "2.375rem",
+        "7xl": "3.25rem",
+        "19xl": "4.75rem",
+        "4xl": "2.875rem",
+        "11xl": "3.75rem",
+        inherit: "inherit",
+      },
+      screens: {
+        mq1025: {
+          raw: "screen and (max-width: 1025px)",
+        },
+        mq975: {
+          raw: "screen and (max-width: 975px)",
+        },
+        mq725: {
+          raw: "screen and (max-width: 725px)",
+        },
+        mq450: {
+          raw: "screen and (max-width: 450px)",
+        },
+      },
+    },
+    corePlugins: {
+      preflight: false,
+    },
+};
+
+DesktopTwo.js
+import GroupComponent from "../components/GroupComponent";
+
+const DesktopTwo = () => {
+  return (
+    <div className="w-full relative bg-gray-200 overflow-hidden flex flex-row items-start justify-start pt-[6.625rem] px-[5.875rem] pb-[27.625rem] box-border leading-[normal] tracking-[normal] lg:pl-[2.875rem] lg:pr-[2.875rem] lg:box-border">
+      <main className="w-[160.25rem] shadow-[2px_30px_75px_#3c5665] bg-gray-100 border-darkslategray-200 border-[1px] border-solid box-border flex flex-row items-end justify-start pt-[6.45rem] pb-[6.437rem] pl-[11.25rem] pr-[5.625rem] gap-[9.05rem] max-w-full shrink-0 text-left text-[6rem] text-darkorchid font-blinker lg:flex-wrap lg:pl-[5.625rem] lg:pr-[2.75rem] lg:box-border mq750:gap-[4.5rem] mq750:pl-[2.75rem] mq750:pt-[4.25rem] mq750:pb-[4.125rem] mq750:box-border mq450:gap-[2.25rem]">
+        <div className="h-[94rem] w-[160.25rem] relative shadow-[2px_30px_75px_#3c5665] bg-gray-100 border-darkslategray-200 border-[1px] border-solid box-border hidden max-w-full" />
+        <div className="flex-1 flex flex-col items-start justify-end pt-[3.375rem] pb-[3.412rem] pl-[2.875rem] pr-[2.5rem] box-border relative min-w-[45.375rem] min-h-[80.875rem] max-w-full mq750:min-w-full">
+          <img
+            className="w-full h-full absolute !m-[0] top-[0rem] bottom-[0rem] left-[0rem] max-h-full object-cover z-[1]"
+            alt=""
+            src="/26a2b1fd58a5eeecb171ef68d74925f6-1@2x.png"
+          />
+          <img
+            className="w-full h-full absolute !m-[0] top-[0rem] right-[0rem] bottom-[0rem] left-[0rem] max-w-full overflow-hidden max-h-full object-cover z-[2]"
+            loading="lazy"
+            alt=""
+            src="/dfb8e14d737d2cc2a5f65380a2ac35121-1@2x.png"
+          />
+          <b className="w-[35.775rem] h-[11.363rem] relative inline-block shrink-0 z-[3] mq1050:text-[4.75rem] mq450:text-[3.625rem]">
+            <p className="m-0">HI THERE!</p>
+            <p className="m-0">Join and Code</p>
+          </b>
+        </div>
+        <div className="w-[64.313rem] flex flex-col items-start justify-end pt-[0rem] px-[0rem] pb-[1.412rem] box-border min-w-[64.313rem] max-w-full lg:flex-1 mq1050:min-w-full">
+          <GroupComponent />
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default DesktopTwo;
+
+GroupComponent.js
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+
+const GroupComponent = ({ className = "" }) => {
+  const navigate = useNavigate();
+
+  const onJoinFieldClick = useCallback(() => {
+    navigate("/desktop-3");
+  }, [navigate]);
+
+  return (
+    <div
+      className={`self-stretch rounded-xl [background:linear-gradient(180deg,_rgba(255,_255,_255,_0.06)_1%,_rgba(255,_255,_255,_0.06))] flex flex-col items-start justify-start pt-[3.9rem] pb-[1.275rem] pl-[5.625rem] pr-[0.5rem] box-border gap-[6.75rem] max-w-full z-[1] text-left text-[8rem] text-mediumpurple font-blinker mq750:gap-[3.375rem] mq750:pl-[2.75rem] mq750:pt-[2.5rem] mq750:pb-[2.5rem] mq750:box-border ${className}`}
+    >
+      <div className="w-[64.313rem] h-[74.3rem] relative rounded-xl [background:linear-gradient(180deg,_rgba(255,_255,_255,_0.06)_1%,_rgba(255,_255,_255,_0.06))] hidden max-w-full" />
+      <div className="self-stretch flex flex-row items-start justify-center py-[0rem] pl-[2.5rem] pr-[2.625rem]">
+        <b className="w-[29.25rem] relative inline-block shrink-0 z-[4] mq1050:text-[6.375rem] mq450:text-[4.75rem]">
+          LOBBY
+        </b>
+      </div>
+      <div className="self-stretch flex flex-col items-start justify-start gap-[2.75rem] max-w-full text-[6rem]">
+        <div className="self-stretch h-[46.375rem] flex flex-row items-start justify-start py-[0rem] pl-[3.875rem] pr-[4rem] box-border max-w-full">
+          <div className="self-stretch flex-1 flex flex-col items-start justify-start gap-[2.187rem] max-w-full">
+            <div className="self-stretch flex-1 flex flex-col items-start justify-start gap-[0.5rem]">
+              <b className="w-[37.875rem] relative inline-block z-[4] mq1050:text-[4.75rem] mq450:text-[3.625rem]">
+                Room Number
+              </b>
+              <div className="self-stretch flex-1 relative rounded-3xs bg-gray-400 z-[4]" />
+            </div>
+            <div className="self-stretch h-[15.625rem] flex flex-col items-start justify-start gap-[0.125rem]">
+              <div className="w-[29.375rem] flex flex-row items-start justify-start py-[0rem] px-[0.75rem] box-border">
+                <b className="flex-1 relative z-[4] mq1050:text-[4.75rem] mq450:text-[3.625rem]">
+                  Password
+                </b>
+              </div>
+              <div className="self-stretch flex-1 relative rounded-3xs bg-gray-400 z-[4]" />
+            </div>
+            <div className="self-stretch flex flex-row items-start justify-center py-[0rem] pl-[2.5rem] pr-[3.125rem] text-[8rem] text-midnightblue">
+              <div className="h-[10.375rem] w-[26.25rem] relative">
+                <div
+                  className="absolute top-[0rem] left-[0rem] rounded-6xl bg-blueviolet w-full h-full cursor-pointer z-[4]"
+                  onClick={onJoinFieldClick}
+                />
+                <b className="absolute h-[calc(100%_-_7px)] top-[0.5rem] left-[4.75rem] inline-block w-[17.5rem] z-[5] mq1050:text-[6.375rem] mq450:text-[4.75rem]">
+                  Join
+                </b>
+              </div>
+            </div>
+          </div>
+        </div>
+        <b className="self-stretch relative text-[3rem] z-[4] text-whitesmoke-200 mq450:text-[2.375rem]">
+          <span>Don’t have a room number? create</span>
+          <span className="text-black">{` `}</span>
+          <span className="text-darkorchid">New Room</span>
+        </b>
+      </div>
+    </div>
+  );
+};
+
+DesktopThree.js
+import FrameComponent1 from "../components/FrameComponent1";
+
+const DesktopThree = () => {
+  return (
+    <div className="w-full relative bg-darkslategray-200 overflow-hidden flex flex-row items-start justify-start py-[0rem] pl-[3.25rem] pr-[0rem] box-border gap-[2.25rem] leading-[normal] tracking-[normal] text-left text-[4rem] text-black font-blinker lg:flex-wrap lg:pl-[2.5rem] lg:pr-[2.5rem] lg:pb-[2.5rem] lg:box-border">
+      <div className="w-[55.125rem] flex flex-col items-start justify-start pt-[1.875rem] px-[0rem] pb-[0rem] box-border min-w-[55.125rem] max-w-full lg:flex-1 mq750:min-w-full">
+        <div className="self-stretch flex flex-col items-start justify-start max-w-full">
+          <FrameComponent1 />
+          <div className="self-stretch flex flex-row items-start justify-start py-[0rem] pl-[0.25rem] pr-[0rem] box-border max-w-full mt-[-30.125rem]">
+            <div className="flex-1 bg-gray-200 border-white border-[1px] border-solid box-border flex flex-col items-start justify-start pt-[2rem] px-[2rem] pb-[3.75rem] gap-[2.25rem] max-w-full z-[1]">
+              <div className="w-[55.125rem] h-[30.25rem] relative bg-gray-200 border-white border-[1px] border-solid box-border hidden max-w-full" />
+              <div className="rounded-mini bg-forestgreen flex flex-row items-start justify-start py-[2.5rem] px-[1.25rem] whitespace-nowrap z-[2]">
+                <div className="h-[10.75rem] w-[36rem] relative rounded-mini bg-forestgreen hidden" />
+                <b className="h-[5.75rem] relative inline-block z-[1]">
+                  Copy Room Number
+                </b>
+              </div>
+              <button className="cursor-pointer [border:none] pt-[2.5rem] px-[3.25rem] pb-[3.375rem] bg-red-200 w-[29.125rem] rounded-mini flex flex-row items-start justify-start box-border whitespace-nowrap z-[2] hover:bg-red-100">
+                <div className="h-[10.75rem] w-[29.125rem] relative rounded-mini bg-red-200 hidden" />
+                <b className="w-[22rem] relative text-[4rem] inline-block font-blinker text-black text-left shrink-0 z-[3]">
+                  Leave Room
+                </b>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section className="h-[128rem] flex-1 relative bg-gray-300 min-w-[77.625rem] max-w-full mq750:min-w-full" />
+    </div>
+  );
+};
+
+export default DesktopThree;
+
+import PropTypes from "prop-types";
+
+const FrameComponent1 = ({ className = "" }) => {
+  return (
+    <div
+      className={`self-stretch bg-gray-200 flex flex-col items-start justify-start pt-[0rem] px-[0rem] pb-[40.5rem] box-border gap-[3rem] max-w-full text-left text-[6.75rem] text-white font-blinker mq750:pb-[17.125rem] mq750:box-border mq1050:pb-[26.375rem] mq1050:box-border ${className}`}
+    >
+      <div className="self-stretch h-[123rem] relative bg-gray-200 hidden" />
+      <div className="self-stretch h-[19.25rem] bg-gray-200 border-white border-[1px] border-solid box-border flex flex-row items-start justify-end py-[3.75rem] px-[6.125rem] whitespace-nowrap max-w-full z-[1] mq450:pl-[2.5rem] mq450:pr-[2.5rem] mq450:box-border">
+        <div className="h-[19.25rem] w-[55.125rem] relative bg-gray-200 border-white border-[1px] border-solid box-border hidden max-w-full" />
+        <b className="w-[39.625rem] relative inline-block shrink-0 z-[2]">{`< Code Sync >`}</b>
+      </div>
+      <div className="self-stretch flex flex-row items-start justify-start py-[0rem] pl-[2.25rem] pr-[2.875rem] box-border max-w-full text-[8rem] text-black">
+        <div className="flex-1 flex flex-col items-start justify-start gap-[1.75rem] max-w-full">
+          <div className="w-[46.5rem] flex flex-col items-start justify-start gap-[3rem] max-w-full">
+            <div className="self-stretch flex flex-row items-start justify-start gap-[2.125rem] mq450:flex-wrap">
+              <div className="w-[13.75rem] rounded-6xl bg-blueviolet flex flex-row items-start justify-start pt-[1.75rem] pb-[0rem] pl-[4.25rem] pr-[3rem] box-border min-w-[13.75rem] z-[1] mq450:flex-1">
+                <div className="h-[12.875rem] w-[13.75rem] relative rounded-6xl bg-blueviolet hidden" />
+                <b className="h-[11.125rem] flex-1 relative inline-block z-[2] mq450:text-[4.75rem] mq1050:text-[6.375rem]">
+                  Y
+                </b>
+              </div>
+              <div className="flex-1 flex flex-col items-start justify-start pt-[3.125rem] px-[0rem] pb-[0rem] box-border min-w-[19.875rem] text-[6rem] text-white">
+                <b className="self-stretch relative z-[1] mq450:text-[2.375rem] mq1050:text-[3.25rem]">
+                  <span>Yashika</span>
+                  <span className="text-[4rem]">{` `}</span>
+                </b>
+              </div>
+            </div>
+            <div className="self-stretch flex flex-row items-start justify-start gap-[2.125rem] mq450:flex-wrap">
+              <div className="h-[14.375rem] w-[13.75rem] relative min-w-[13.75rem] mq450:flex-1">
+                <div className="absolute top-[0rem] left-[0rem] rounded-6xl bg-blueviolet w-[13.75rem] h-[12.875rem] z-[1]" />
+                <b className="absolute top-[1.625rem] left-[3.25rem] inline-block w-[10.5rem] h-[12.75rem] z-[2] mq450:text-[4.75rem] mq1050:text-[6.375rem]">
+                  KB
+                </b>
+              </div>
+              <div className="flex-1 flex flex-col items-start justify-start pt-[2.25rem] px-[0rem] pb-[0rem] box-border min-w-[19.875rem] text-[6rem] text-white">
+                <b className="self-stretch relative z-[1] mq450:text-[3.625rem] mq1050:text-[4.75rem]">
+                  Karan Bisht
+                </b>
+              </div>
+            </div>
+          </div>
+          <div className="self-stretch flex flex-col items-start justify-start gap-[1.75rem] max-w-full">
+            <div className="w-[46.5rem] flex flex-row items-start justify-start gap-[1.25rem] max-w-full mq450:flex-wrap">
+              <div className="h-[13.875rem] w-[14.625rem] relative min-w-[14.625rem] mq450:flex-1">
+                <div className="absolute top-[0rem] left-[0rem] rounded-6xl bg-blueviolet w-[13.75rem] h-[12.875rem] z-[1]" />
+                <b className="absolute top-[1.125rem] left-[4.125rem] inline-block w-[10.5rem] h-[12.75rem] z-[2] mq450:text-[4.75rem] mq1050:text-[6.375rem]">
+                  R
+                </b>
+              </div>
+              <div className="flex-1 flex flex-col items-start justify-start pt-[1.75rem] px-[0rem] pb-[0rem] box-border min-w-[19.875rem] text-[6rem] text-white">
+                <b className="self-stretch relative z-[1] mq450:text-[3.625rem] mq1050:text-[4.75rem]">
+                  Raj
+                </b>
+              </div>
+            </div>
+            <div className="self-stretch flex flex-row items-start justify-start py-[0rem] pl-[0.5rem] pr-[0rem] box-border max-w-full">
+              <div className="flex-1 flex flex-row items-start justify-start gap-[1.625rem] max-w-full mq450:flex-wrap">
+                <div className="rounded-6xl bg-blueviolet flex flex-row items-start justify-start pt-[0.125rem] pb-[0rem] pl-[1.75rem] pr-[1.5rem] box-border min-w-[13.75rem] z-[1] mq450:flex-1">
+                  <div className="self-stretch w-[13.75rem] relative rounded-6xl bg-blueviolet hidden" />
+                  <b className="h-[12.75rem] relative inline-block min-w-[10.5rem] z-[1] mq450:text-[4.75rem] mq1050:text-[6.375rem]">
+                    AK
+                  </b>
+                </div>
+                <div className="flex-1 flex flex-col items-start justify-start pt-[1.125rem] px-[0rem] pb-[0rem] box-border min-w-[22rem] text-[6rem] text-white">
+                  <b className="relative z-[1] mq450:text-[3.625rem] mq1050:text-[4.75rem]">
+                    Ayush Kumar
+                  </b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+FrameComponent1.propTypes = {
+  className: PropTypes.string,
+};
+
+export default FrameComponent1;
+
+global.css
+@import url("https://fonts.googleapis.com/css2?family=Blinker:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Black+Ops+One:wght@400&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+  font-size: 8;
+}
+body {
+  @apply leading-[normal] m-0;
+}
+*,
+::before,
+::after {
+  border-width: 0;
+}
+
+tailwind.config.js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+    content: ["./src/**/*.{js,jsx,ts,tsx}"],
+    theme: {
+      extend: {
+        colors: {
+          gray: {
+            "100": "#22292f",
+            "200": "#1e2025",
+            "300": "rgba(34, 41, 47, 0.5)",
+            "400": "rgba(255, 255, 255, 0.15)",
+          },
+          darkslategray: {
+            "100": "#346b77",
+            "200": "#393b50",
+            "300": "#29343d",
+            "400": "rgba(60, 86, 101, 0.5)",
+          },
+          darkorchid: "#a762ff",
+          black: "#000",
+          whitesmoke: {
+            "100": "#f5f5f5",
+            "200": "#efeded",
+          },
+          midnightblue: "#2d144b",
+          blueviolet: "#9847ff",
+          mediumpurple: "#c191fe",
+          white: "#fff",
+          red: {
+            "100": "#ff2929",
+            "200": "#ed0404",
+          },
+          forestgreen: "#029032",
+          cadetblue: {
+            "100": "#5c919e",
+            "200": "#478585",
+            "300": "rgba(92, 145, 158, 0.09)",
+          },
+        },
+        spacing: {},
+        fontFamily: {
+          blinker: "Blinker",
+          "black-ops-one": "'Black Ops One'",
+        },
+        borderRadius: {
+          xl: "20px",
+          "6xl": "25px",
+          "3xs": "10px",
+          mini: "15px",
+        },
+      },
+      fontSize: {
+        "5xl": "3rem",
+        lgi: "2.375rem",
+        "45xl": "8rem",
+        "32xl": "6.375rem",
+        "19xl": "4.75rem",
+        "29xl": "6rem",
+        "10xl": "3.625rem",
+        "13xl": "4rem",
+        "7xl": "3.25rem",
+        "35xl": "6.75rem",
+        "4xl": "2.875rem",
+        "11xl": "3.75rem",
+        inherit: "inherit",
+      },
+      screens: {
+        lg: {
+          max: "1200px",
+        },
+        mq1050: {
+          raw: "screen and (max-width: 1050px)",
+        },
+        mq750: {
+          raw: "screen and (max-width: 750px)",
+        },
+        mq450: {
+          raw: "screen and (max-width: 450px)",
+        },
+      },
+    },
+    corePlugins: {
+      preflight: false,
+    },
+};
