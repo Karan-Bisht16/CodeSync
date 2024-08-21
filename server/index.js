@@ -11,10 +11,11 @@ app.use(cors({
     origin: true
 }));
 const io = new Server(server);
-app.use(express.static("build"));
-app.use((req, res, next) => {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
-});
+
+// app.use(express.static("build"));
+// app.use((req, res, next) => {
+//     res.sendFile(path.join(__dirname, "build", "index.html"));
+// });
 
 const userSocketMap = {};
 const getAllConnectedClients = (roomId) => {
@@ -29,7 +30,7 @@ const getAllConnectedClients = (roomId) => {
 };
 
 io.on("connection", (socket) => {
-    // console.log('Socket connected', socket.id);
+    console.log(`Socket connected with id: ${socket.id}`);
     socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
         userSocketMap[socket.id] = username;
         socket.join(roomId);
@@ -51,12 +52,10 @@ io.on("connection", (socket) => {
     socket.on(ACTIONS.SEND_MESSAGE, ({ roomId, message }) => {
         socket.in(roomId).emit(ACTIONS.SEND_MESSAGE, { message });
     });
-
     // when new user join the room all the code which are there are also shows on that persons editor
     socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {
         io.to(socketId).emit(ACTIONS.CODE_CHANGE, { code });
     });
-
     // leave room
     socket.on("disconnecting", () => {
         const rooms = [...socket.rooms];
@@ -67,7 +66,6 @@ io.on("connection", (socket) => {
                 username: userSocketMap[socket.id],
             });
         });
-
         delete userSocketMap[socket.id];
         socket.leave();
     });
