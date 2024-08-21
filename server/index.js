@@ -3,14 +3,21 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const path = require("path");
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
 const ACTIONS = require("./Actions");
 
 const server = http.createServer(app);
 app.use(cors({
     origin: true
 }));
-const io = new Server(server);
+const io = require('socket.io')(server, {
+    cors: {
+        origin: true,
+        transports: ['websocket', 'polling'],
+        credentials: true
+    },
+    allowEIO3: true
+});
 
 // app.use(express.static("build"));
 // app.use((req, res, next) => {
