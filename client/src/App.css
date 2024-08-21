@@ -1,3 +1,8 @@
+.homePageWrapper{
+    background-image: url("https://c4.wallpaperflare.com/wallpaper/735/578/409/minimalism-airplane-colorful-red-wallpaper-preview.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .mainWrap {
     display: flex;
     height: 100%;
@@ -38,7 +43,7 @@
 }
 
 .logoImage {
-    height: 60px;
+    height: 20rem;
 }
 
 .homePageWrapper {
@@ -50,11 +55,23 @@
 }
 
 .formWrapper {
-    background: #282a36;
+    background-image: url("https://wallpapercave.com/wp/wp5709278.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    /*background: #282a36;*/
     padding: 20px;
+    box-shadow: 0 0 5px rgb(133, 255, 255),0 0 8px rgb(133, 255, 255),0 0 15px rgb(133, 255, 255),0 0 25px rgb(133, 255, 255),0 0 60px rgb(133, 255, 255);
+
     border-radius: 10px;
     width: 400px;
     max-width: 90%;
+}
+.formWrapper img{
+    height: 25rem;
+    
+    margin-top: -120px;
+    
+     
 }
 
 footer {
@@ -69,11 +86,14 @@ footer a {
 .inputGroup {
     display: flex;
     flex-direction: column;
+    
 }
 
 .mainLabel {
+    font-size: 1.5rem;
+    font-family: 'Times New Roman', Times, serif;
     margin-bottom: 20px;
-    margin-top: 0;
+    margin-top: -130px;
 }
 
 .homePageLogo {
@@ -98,6 +118,8 @@ footer a {
 
 .joinBtn {
     background: #4aed88;
+    box-shadow: 0 0 5px rgb(156, 255, 143), 0 0 25px rgb(152, 255, 143);
+    border: none;
     width: 100px;
     margin-left: auto;
 }
@@ -108,9 +130,10 @@ footer a {
     margin-left: auto;
     color: white;
 }
-
-.joinBtn:hover,
-.leaveBtn:hover {
+.leaveBtn:hover{
+    background: rgb(255, 93, 93);
+}
+.joinBtn:hover {
     background: #2b824c;
 }
 
@@ -150,7 +173,9 @@ footer a:hover {
     margin-top: 10px;
 }
 
+
 .seLang {
+    color: black;
     border: none;
     width: 100%;
     margin-top: 10px;
@@ -160,12 +185,29 @@ footer a:hover {
     font-weight: bold;
     text-align-last: center;
 }
-
-.copyBtn,
-.runBtn,
+.seLang option{
+    color: black;
+}
 .leaveBtn {
     width: 100%;
     margin-top: 20px;
+    box-shadow: 0 0 2px rgb(255, 73, 73), 0 0 15px rgb(255, 125, 125);
+    border: none;
+}
+.copyBtn{
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 0 2px rgb(156, 255, 143), 0 0 15px rgb(152, 255, 143);
+    border: none;
+}
+.runBtn{
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 0 2px rgb(128, 219, 255), 0 0 15px rgb(143, 231, 255);
+    border: none;
+}
+.runBtn:hover{
+    background: #465eaf;
 }
 
 .CodeMirror {
@@ -173,24 +215,44 @@ footer a:hover {
     line-height: 1.5;
     min-height: calc(72vh);
     width: 100%;
+    background-image: url("https://c0.wallpaperflare.com/preview/581/557/303/background-black-texture-dark-thumbnail.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .IO-container {
     display: flex;
     justify-content: left;
-    min-height: calc(4vh);
+    min-height: calc(3vh);
     width: 100%;
+    
+}
+.chatWrap .chatArea{
+    background-image: url("https://www.itl.cat/pngfile/big/310-3108113_galaxy-3d-wallpaper-black.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #fff;
 }
 
 .inputArea {
+    /*background-image: url("https://c0.wallpaperflare.com/preview/581/557/303/background-black-texture-dark-thumbnail.jpg");
+
+    background-size: cover;
+    background-repeat: no-repeat;*/
+    border-radius: 5px;
     font-size: 16px;
     line-height: 1.6;
     padding-top: 10px;
     background-color: rgba(0, 0, 0, 0.401);
-    color: white;
+    color: rgb(255, 253, 253);
     font-size: 16px;
     height: calc(15vh);
     width: 100%;
+}
+.asideWrap{
+    background-image: url("https://i.pinimg.com/736x/92/33/b3/9233b3a6c7f7ffbab42531e499499514.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .chatArea {
@@ -198,7 +260,7 @@ footer a:hover {
     line-height: 1.6;
     padding-top: 10px;
     background-color: #1c1e29;
-    color: white;
+    color: rgb(253, 253, 253);
     font-size: 16px;
     border: 1px solid transparent;
     min-height: calc(85vh);
@@ -210,9 +272,21 @@ footer a:hover {
     height: calc(5vh);
 }
 
+
 .sendBtn {
+    
     width: 20%;
-    margin-right: 5px;
+    height: 35px;
+    
+    padding-bottom: 4px;
+    box-shadow: 0 0 1px rgb(117, 186, 255), 0 0 10px rgb(125, 222, 255);
+    border: none;
+}
+.sendBtn:hover{
+    background-color: rgb(255, 48, 48);
+    box-shadow: 0 0 2px rgb(255, 73, 73), 0 0 15px rgb(255, 125, 125);
+    border: none;
+    cursor: pointer;
 }
 
 .inputBox {
@@ -221,7 +295,15 @@ footer a:hover {
     outline: none;
     border: none;
     margin-bottom: 14px;
-    background: #eee;
+    background: rgb(0,0,0,0.9);
+    
+    box-shadow: rgba(174, 221, 255, 0.806) 0px 2px 5px, rgba(146, 231, 251, 0.886) 0px 3px 2px;
+
+
+
+
+
+
     font-size: 16px;
     font-weight: bold;
 }
@@ -297,4 +379,18 @@ footer a:hover {
 
 .textarea-style::-webkit-scrollbar-thumb:hover {
     background: rgb(189, 187, 225);
+}
+
+.whiteboardBtn{
+    border: 1px solid #fff;
+    background: transparent;
+    border-radius: 4px;
+}
+.whiteboardBtn:hover{
+    cursor: pointer;
+    background: #28271dfe;
+    box-shadow: 0 0 2px rgb(170, 168, 168), 0 0 15px rgb(164, 164, 164);
+
+
+    
 }
