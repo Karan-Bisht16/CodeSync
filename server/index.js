@@ -1,28 +1,18 @@
 const cors = require("cors");
-const express = require("express");
-const app = express();
 const http = require("http");
 const path = require("path");
-// const { Server } = require("socket.io");
+const express = require("express");
+const app = express();
+const { Server } = require("socket.io");
 const ACTIONS = require("./Actions");
 
 const server = http.createServer(app);
+
 app.use(cors({
     origin: true
 }));
-const io = require('socket.io')(server, {
-    cors: {
-        origin: true,
-        transports: ['websocket', 'polling'],
-        credentials: true
-    },
-    allowEIO3: true
-});
 
-// app.use(express.static("build"));
-// app.use((req, res, next) => {
-//     res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
+const io = new Server(server);
 
 const userSocketMap = {};
 const getAllConnectedClients = (roomId) => {

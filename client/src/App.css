@@ -1,8 +1,9 @@
-.homePageWrapper{
+.homePageWrapper {
     background-image: url("https://c4.wallpaperflare.com/wallpaper/735/578/409/minimalism-airplane-colorful-red-wallpaper-preview.jpg");
     background-repeat: no-repeat;
     background-size: cover;
 }
+
 .mainWrap {
     display: flex;
     height: 100%;
@@ -60,18 +61,19 @@
     background-repeat: no-repeat;
     /*background: #282a36;*/
     padding: 20px;
-    box-shadow: 0 0 5px rgb(133, 255, 255),0 0 8px rgb(133, 255, 255),0 0 15px rgb(133, 255, 255),0 0 25px rgb(133, 255, 255),0 0 60px rgb(133, 255, 255);
+    box-shadow: 0 0 5px rgb(133, 255, 255), 0 0 8px rgb(133, 255, 255), 0 0 15px rgb(133, 255, 255), 0 0 25px rgb(133, 255, 255), 0 0 60px rgb(133, 255, 255);
 
     border-radius: 10px;
     width: 400px;
     max-width: 90%;
 }
-.formWrapper img{
+
+.formWrapper img {
     height: 25rem;
-    
+
     margin-top: -120px;
-    
-     
+
+
 }
 
 footer {
@@ -86,7 +88,7 @@ footer a {
 .inputGroup {
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .mainLabel {
@@ -130,9 +132,11 @@ footer a {
     margin-left: auto;
     color: white;
 }
-.leaveBtn:hover{
+
+.leaveBtn:hover {
     background: rgb(255, 93, 93);
 }
+
 .joinBtn:hover {
     background: #2b824c;
 }
@@ -185,28 +189,33 @@ footer a:hover {
     font-weight: bold;
     text-align-last: center;
 }
-.seLang option{
+
+.seLang option {
     color: black;
 }
+
 .leaveBtn {
     width: 100%;
     margin-top: 20px;
     box-shadow: 0 0 2px rgb(255, 73, 73), 0 0 15px rgb(255, 125, 125);
     border: none;
 }
-.copyBtn{
+
+.copyBtn {
     width: 100%;
     margin-top: 20px;
     box-shadow: 0 0 2px rgb(156, 255, 143), 0 0 15px rgb(152, 255, 143);
     border: none;
 }
-.runBtn{
+
+.runBtn {
     width: 100%;
     margin-top: 20px;
     box-shadow: 0 0 2px rgb(128, 219, 255), 0 0 15px rgb(143, 231, 255);
     border: none;
 }
-.runBtn:hover{
+
+.runBtn:hover {
     background: #465eaf;
 }
 
@@ -225,9 +234,10 @@ footer a:hover {
     justify-content: left;
     min-height: calc(3vh);
     width: 100%;
-    
+
 }
-.chatWrap .chatArea{
+
+.chatWrap .chatArea {
     background-image: url("https://www.itl.cat/pngfile/big/310-3108113_galaxy-3d-wallpaper-black.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -249,7 +259,8 @@ footer a:hover {
     height: calc(15vh);
     width: 100%;
 }
-.asideWrap{
+
+.asideWrap {
     background-image: url("https://i.pinimg.com/736x/92/33/b3/9233b3a6c7f7ffbab42531e499499514.jpg");
     background-repeat: no-repeat;
     background-size: cover;
@@ -274,15 +285,16 @@ footer a:hover {
 
 
 .sendBtn {
-    
+
     width: 20%;
     height: 35px;
-    
+
     padding-bottom: 4px;
     box-shadow: 0 0 1px rgb(117, 186, 255), 0 0 10px rgb(125, 222, 255);
     border: none;
 }
-.sendBtn:hover{
+
+.sendBtn:hover {
     background-color: rgb(255, 48, 48);
     box-shadow: 0 0 2px rgb(255, 73, 73), 0 0 15px rgb(255, 125, 125);
     border: none;
@@ -295,8 +307,8 @@ footer a:hover {
     outline: none;
     border: none;
     margin-bottom: 14px;
-    background: rgb(0,0,0,0.9);
-    
+    background: rgb(0, 0, 0, 0.9);
+
     box-shadow: rgba(174, 221, 255, 0.806) 0px 2px 5px, rgba(146, 231, 251, 0.886) 0px 3px 2px;
 
 
@@ -381,16 +393,17 @@ footer a:hover {
     background: rgb(189, 187, 225);
 }
 
-.whiteboardBtn{
+.whiteboardBtn {
     border: 1px solid #fff;
     background: transparent;
     border-radius: 4px;
 }
-.whiteboardBtn:hover{
+
+.whiteboardBtn:hover {
     cursor: pointer;
     background: #28271dfe;
     box-shadow: 0 0 2px rgb(170, 168, 168), 0 0 15px rgb(164, 164, 164);
 
 
-    
+
 }
