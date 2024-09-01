@@ -1,15 +1,18 @@
 const cors = require("cors");
 const http = require("http");
-const path = require("path");
+// const path = require("path");
 const express = require("express");
 const app = express();
 const { Server } = require("socket.io");
-const ACTIONS = require("./Actions");
+const ACTIONS = require("./constants/Actions");
 
 const server = http.createServer(app);
+const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-    origin: true
+    origin: true,
+    credentials: true,
+    optionsSuccessStatus: 200,
 }));
 
 const io = new Server(server);
@@ -20,7 +23,8 @@ const getAllConnectedClients = (roomId) => {
         (socketId) => {
             return {
                 socketId,
-                username: userSocketMap[socketId],
+                username: userSocketMap[socketId].username,
+                userColor: userSocketMap[socketId].userColor,
             };
         }
     );
@@ -28,16 +32,17 @@ const getAllConnectedClients = (roomId) => {
 
 io.on("connection", (socket) => {
     console.log(`Socket connected with id: ${socket.id}`);
-    socket.on(ACTIONS.JOIN, ({ roomId, username }) => {
-        userSocketMap[socket.id] = username;
+    socket.on(ACTIONS.JOIN, ({ roomId, username, userColor }) => {
+        userSocketMap[socket.id] = { username, userColor };
         socket.join(roomId);
         const clients = getAllConnectedClients(roomId);
         // notify that new user join
         clients.forEach(({ socketId }) => {
             io.to(socketId).emit(ACTIONS.JOINED, {
                 clients,
-                username,
                 socketId: socket.id,
+                username,
+                userColor,
             });
         });
     });
@@ -60,7 +65,7 @@ io.on("connection", (socket) => {
         rooms.forEach((roomId) => {
             socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
                 socketId: socket.id,
-                username: userSocketMap[socket.id],
+                username: userSocketMap[socket.id]?.username,
             });
         });
         delete userSocketMap[socket.id];
@@ -68,5 +73,8 @@ io.on("connection", (socket) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server is runnint on port ${PORT}`));
+app.get("/pingServer", (req, res) => {
+    return res.status(200).json(true);
+});
+
+server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

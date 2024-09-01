@@ -1,32 +1,39 @@
-import "./App.css";
+import { useContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import EditorPage from "./components/EditorPage";
 import { Toaster } from "react-hot-toast";
-import Whiteboard from "./components/Whiteboard";
+// importing pages
+import Home from "./pages/Home.page";
+import EditorPage from "./pages/Editor.page";
+import Whiteboard from "./pages/Whiteboard.page";
+// importing contexts
+import { ConfirmationDialogContext } from "./contexts/ConfirmationDialog.context";
+// importing components
+import ConfirmationDialog from "./components/ConfirmationDialog";
 
-function App() {
+const App = () => {
+    const { dialog, dialogValue, closeDialog, linearProgressBar, handleDialog } = useContext(ConfirmationDialogContext)
+
     return (
         <>
-            <div>
-                <Toaster
-                    position="top-right"
-                    toastOptions={{
-                        success: {
-                            theme: {
-                                primary: "#4aed88",
-                            },
-                        },
-                    }}
-                ></Toaster>
-            </div>
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    success: {
+                        theme: { primary: "#4aed88" },
+                    },
+                }}
+            />
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Home />}></Route>
-                    <Route path="/editor/:roomId" element={<EditorPage />}></Route>
-                    <Route path="/whiteboard/:roomId" element={<Whiteboard />} />
+                    <Route path="/editor/:roomID" element={<EditorPage />} />
+                    <Route path="/whiteboard/:roomID" element={<Whiteboard />} />
                 </Routes>
             </BrowserRouter>
+            <ConfirmationDialog
+                dialog={dialog} closeDialog={closeDialog} handleDialog={handleDialog}
+                linearProgressBar={linearProgressBar} dialogValue={dialogValue}
+            />
         </>
     );
 }
