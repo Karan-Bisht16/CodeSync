@@ -6,8 +6,13 @@ import { ConfirmationDialogProvider } from "./contexts/ConfirmationDialog.contex
 // importing styling
 import "./index.css";
 
+import { Analytics } from "@vercel/analytics/react";
+
 createRoot(document.getElementById("root")).render(
-    <ConfirmationDialogProvider>
-        <App />
-    </ConfirmationDialogProvider>
+    <>
+        <ConfirmationDialogProvider>
+            <App />
+        </ConfirmationDialogProvider>
+        <Analytics />
+    </>
 );

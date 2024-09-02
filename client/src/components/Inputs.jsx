@@ -1,13 +1,15 @@
-const LogoInput = ({ placeholder, value, inputRef, autoFocus, handleChangeFunction, handleKeyUp, logo }) => {
+const LogoInput = ({ type, placeholder, value, inputRef, handleChangeFunction, handleKeyUp, styling, autoFocus, autoComplete, logo }) => {
     return (
         <div className="flex items-center relative">
             <input
-                type="text" placeholder={placeholder}
-                value={value} ref={inputRef} autoFocus={autoFocus}
+                type={type} placeholder={placeholder} value={value} ref={inputRef}
                 onChange={handleChangeFunction} onKeyUp={handleKeyUp || null}
-                className="w-full p-3 pr-12 text-md rounded-lg outline-none"
+                className={`w-full pr-12 text-md rounded-lg text-primary-accent-800 selection:bg-primary-accent-800 selection:text-white outline-1 outline-primary-accent-500 ${styling}`}
+                autoFocus={autoFocus} autoComplete={autoComplete || "on"}
             />
-            {logo}
+            <div className="absolute right-[10px] flex items-center bg-white">
+                {logo}
+            </div>
         </div>
     );
 };

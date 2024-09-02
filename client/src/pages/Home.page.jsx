@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
 import toast from "react-hot-toast";
 // importing components
-import Logo from "../components/Logo";
+import { LogoWithTitle } from "../components/Logo";
 // importing theme
 import { colors, userThemes } from "../constants/Themes";
 // importing assets
@@ -51,6 +51,7 @@ const Home = () => {
             return;
         }
         const userColor = userThemes[Math.floor(Math.random() * userThemes.length)];
+        // set loading screen until server wakes up 
         setLoading(true);
         const response = await checkServerAvailibility();
         if (response) {
@@ -83,32 +84,29 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="mx-8 my-12 p-8 rounded-lg bg-secondary-bg">
-                    <div className="font-blinker text-primary-accent-500 text-3xl font-semibold flex justify-center items-center">
-                        <Logo color={`${colors["primary-accent"]["500"]}`} />
-                        &lt; CodeSync &gt;
-                    </div>
-                    <div className="flex flex-col gap-3 mt-12 text-primary-accent-800 selection:bg-primary-accent-800 selection:text-white">
+                    <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} />
+                    <div className="flex flex-col gap-3 mt-12">
                         <LogoInput
-                            placeholder="Enter room ID" value={roomID} inputRef={roomIDField} autoFocus={true}
+                            type="text" placeholder="Enter room ID" value={roomID} inputRef={roomIDField}
                             handleChangeFunction={(e) => setRoomID(e.target.value)} handleKeyUp={handleInputEnter}
+                            styling="p-3" autoFocus={true} autoComplete="off"
                             logo={
                                 <lord-icon
-                                    src="https://cdn.lordicon.com/rfgxevig.json"
-                                    trigger="loop-on-hover" stroke="bold"
+                                    src="https://cdn.lordicon.com/rfgxevig.json" trigger="loop-on-hover" stroke="bold"
                                     colors={`primary:${colors["primary-accent"]["500"]},secondary:${colors["primary-accent"]["500"]}`}
-                                    style={{ width: "30px", height: "48px", background: "white", position: "absolute", right: "10px" }}
+                                    style={{ width: "30px", height: "46px" }}
                                 />
                             }
                         />
                         <LogoInput
-                            placeholder="Enter a username" value={username} inputRef={usernameField}
+                            type="text" placeholder="Enter a username" value={username} inputRef={usernameField}
                             handleChangeFunction={(e) => setUsername(e.target.value)} handleKeyUp={handleInputEnter}
+                            styling="p-3"
                             logo={
                                 <lord-icon
-                                    src="https://cdn.lordicon.com/bgebyztw.json"
-                                    trigger="loop-on-hover" stroke="bold" state="hover-looking-around"
+                                    src="https://cdn.lordicon.com/bgebyztw.json" trigger="loop-on-hover" stroke="bold" state="hover-looking-around"
                                     colors={`primary:${colors["primary-accent"]["500"]},secondary:${colors["primary-accent"]["500"]}`}
-                                    style={{ width: "30px", height: "48px", background: "white", position: "absolute", right: "10px" }}
+                                    style={{ width: "30px", height: "46px" }}
                                 />
                             }
                         />
@@ -119,9 +117,7 @@ const Home = () => {
                             Join
                         </button>
                         <div className="w-full text-white text-center relative my-2">
-                            <span className="bg-secondary-bg px-2.5 relative z-10">
-                                or
-                            </span>
+                            <span className="bg-secondary-bg px-2.5 relative z-10">or</span>
                             <hr className="absolute w-full top-[50%] z-0" />
                         </div>
                         <p className="text-center text-white">
@@ -139,8 +135,7 @@ const Home = () => {
                     </div>
                     <div className=" h-1/2 w-1/2 flex flex-col justify-center items-center rounded-md bg-tertiary-bg">
                         <lord-icon
-                            src="https://cdn.lordicon.com/zvheymqn.json"
-                            trigger="loop"
+                            src="https://cdn.lordicon.com/zvheymqn.json" trigger="loop"
                             colors={`primary:${colors["primary-accent"]["400"]},secondary:white`}
                             style={{ width: "250px", height: "250px" }}
                         />

@@ -1,18 +1,21 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { ClearRounded, FilterFramesRounded, PlayArrowRounded, Settings } from "@mui/icons-material";
-import { Drawer, IconButton, Menu, MenuItem, Switch, Tooltip } from "@mui/material";
-import { LogoutRounded, MoreVert } from "@mui/icons-material";
-import axios from "axios";
+import { Drawer, MenuItem, Switch, Tooltip } from "@mui/material";
+import { ClearRounded, EmojiEmotions, FilterFramesRounded, LogoutRounded, MoreVert, PlayArrowRounded, Settings } from "@mui/icons-material";
 // importing components
-import Logo from "../components/Logo";
+import { LogoWithTitle } from "../components/Logo";
 import { SidebarButton } from "../components/Buttons";
+import { LogoInput } from "../components/Inputs";
+import CustomMenu from "../components/CustomMenu";
 import CustomMenuItem from "../components/CustomMenuItem";
 import Client from "../components/Client";
 import Editor from "../components/Editor";
-import { initSocket } from "../utils/socket";
+// importing contexts
 import { ConfirmationDialogContext } from "../contexts/ConfirmationDialog.context";
+// importing utils
+import { initSocket } from "../utils/socket";
+import { executeCode } from "../utils/api";
 // importing theme
 import { colors } from "../constants/Themes";
 // importing constants
@@ -22,15 +25,14 @@ import { LANGUAGES, FONTSIZES, INDENTSIZES, TABSIZES } from "../constants/Editor
 const chatDrawerWidth = "27.5%";
 
 const EditorPage = () => {
+    const { roomID } = useParams();
+    const { openDialog } = useContext(ConfirmationDialogContext);
     const location = useLocation();
     const navigate = useNavigate();
-    const { roomID } = useParams();
 
     const socketRef = useRef(null);
     const codeRef = useRef(null);
-    const chatInputField = useRef(null);
     const [clients, setClients] = useState([]);
-    const { openDialog } = useContext(ConfirmationDialogContext);
 
     if (!location.state && !location.state.username && !location.state.userColor) {
         return <Navigate to="/" />;
@@ -44,7 +46,7 @@ const EditorPage = () => {
             socketRef.current?.on("connect_failed", (error) => handleErrors(error));
 
             const handleErrors = (error) => {
-                console.log("Socket error:", error);
+                console.error("Socket error:", error);
                 toast.error("Socket connection failed, try again later.");
                 navigate("/");
             }
@@ -102,7 +104,6 @@ const EditorPage = () => {
             toast.success("Room ID copied to clipboard");
         } catch (error) {
             toast.error("Failed to copy Room ID");
-            console.error(error);
         }
     };
 
@@ -160,31 +161,13 @@ const EditorPage = () => {
             return;
         }
 
-        toast.loading("Running Code...");
-
-        const encodedParams = new URLSearchParams();
-        encodedParams.append("LanguageChoice", LANGUAGES[languageIndex]?.languageNumber);
-        encodedParams.append("Program", code);
-        encodedParams.append("Input", input);
-
-        const options = {
-            method: "POST",
-            url: "https://code-compiler.p.rapidapi.com/v2",
-            headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-RapidAPI-Key": import.meta.env.VITE_API_KEY,
-                "X-RapidAPI-Host": "code-compiler.p.rapidapi.com",
-            },
-            data: encodedParams,
-        };
         try {
-            const response = await axios.request(options);
-            let message = response.data.Result;
-            let error = false;
-            if (message === null) {
-                message = response.data.Errors;
-                error = true;
-            }
+            toast.loading("Running Code...");
+            const { message, error } = await executeCode({
+                LanguageChoice: LANGUAGES[languageIndex]?.languageNumber,
+                Program: code,
+                Input: input
+            });
             outputClicked();
             toast.dismiss();
             inputField.value = message;
@@ -199,26 +182,37 @@ const EditorPage = () => {
             toast.dismiss();
             toast.error("Code compilation unsuccessful");
             inputField.style.color = "red";
-            if (error.status === 504 && error?.response?.data?.messages === "The request to the API has timed out. Please try again later, or if the issue persists, please contact the API provider") {
-                inputField.value = "Timeout exception. Check your code.";
-            } else {
-                inputField.value = "Something went wrong, Please check your code and input.";
-            }
+            inputField.value = "Something went wrong, Please check your code and input.";
         }
     };
 
-    const sendMessage = (chatMessage) => {
+    // JS for Editor Settings Menu
+    const [editorAnchorEl, setEditorAnchorEl] = useState(null);
+    const openEditorMenu = Boolean(editorAnchorEl);
+    const handleEditorMenuOpen = (event) => { setEditorAnchorEl(event.currentTarget) };
+    const handleEditorMenuClose = () => { setEditorAnchorEl(null) };
+
+    // JS for Chat Drawer 
+    const [openChat, setOpenChat] = useState(true);
+    const handleChatDrawerOpen = () => { setOpenChat(true) };
+    const handleChatDrawerClose = () => { setOpenChat(false) };
+
+    // JS for Chat
+    const chatInputField = useRef(null);
+    const [chatMessage, setChatMessage] = useState("");
+    const sendMessage = () => {
+        if (chatMessage.trim() === "") return;
         let message;
         if (anonymous) {
             message =
                 `<p class="text-white break-words">
-                    <span className="text-gray-400">Anonymous</span>: ${chatMessage}
-                </p>`
+                        <span className="text-gray-400">Anonymous</span>: ${chatMessage}
+                    </p>`
         } else {
             message =
                 `<p class="text-white break-words">
-                    <span style="color: ${location.state.userColor};" >${location.state.username}</span>: ${chatMessage}
-                </p>`
+                        <span style="color: ${location.state.userColor};" >${location.state.username}</span>: ${chatMessage}
+                    </p>`
         }
         const chatWindow = document.getElementById("chatWindow");
         let currText = chatWindow.innerHTML;
@@ -226,34 +220,20 @@ const EditorPage = () => {
         chatWindow.innerHTML = currText;
         chatWindow.scrollTop = chatWindow.scrollHeight;
         socketRef.current?.emit(ACTIONS.SEND_MESSAGE, { roomID, message });
+        setChatMessage("");
     };
-
     const handleChatInput = (key) => {
         if (key.code === "Enter") {
-            const chatInput = document.getElementById("chatInput");
-            if (chatInput.value.trim() !== "") {
-                sendMessage(chatInput.value.trim());
-                chatInput.value = "";
-            }
+            sendMessage();
         }
     };
-
-    // JS for Chat Drawer 
-    const [openChat, setOpenChat] = useState(true);
-    const handleChatDrawerOpen = () => { setOpenChat(true) };
-    const handleChatDrawerClose = () => { setOpenChat(false) };
-
-    // JS for Editor Settings Menu
-    const [editorAnchorEl, setEditorAnchorEl] = useState(null);
-    const openEditorMenu = Boolean(editorAnchorEl);
-    const handleEditorMenuClick = (event) => { setEditorAnchorEl(event.currentTarget) };
-    const handleEditorMenuClose = () => { setEditorAnchorEl(null) };
 
     // JS for Chat Settings Menu
     const [chatAnchorEl, setChatAnchorEl] = useState(null);
     const openChatMenu = Boolean(chatAnchorEl);
-    const handleChatMenuClick = (event) => { setChatAnchorEl(event.currentTarget) };
+    const handleChatMenuOpen = (event) => { setChatAnchorEl(event.currentTarget) };
     const handleChatMenuClose = () => { setChatAnchorEl(null) };
+
     const [anonymous, setAnonymous] = useState(false);
     const handleAnonymousClick = async () => {
         setAnonymous(!anonymous);
@@ -289,10 +269,7 @@ const EditorPage = () => {
             {/* Left side-panel */}
             <div className="h-screen min-w-64 w-64 flex flex-col justify-between">
                 <div className="text-white">
-                    <div className="font-blinker text-primary-accent-500 text-3xl font-semibold flex justify-center items-center mt-3 mr-2">
-                        <Logo color={`${colors["primary-accent"]["500"]}`} />
-                        &lt; CodeSync &gt;
-                    </div>
+                    <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="mt-3 mr-2" />
                     <hr className="w-[87.5%] mx-auto mt-2 mb-1.5" />
                     <h3 className="text-center">Participants</h3>
                     <div className="px-2 py-1">
@@ -327,33 +304,19 @@ const EditorPage = () => {
                         </select>
                     </div>
                     <div>
-                        <Tooltip title="Editor Settings">
-                            <IconButton onClick={handleEditorMenuClick}>
-                                <MoreVert
-                                    id="basic-editor-button" aria-haspopup="true"
-                                    aria-controls={openEditorMenu ? "basic-editor-menu" : undefined}
-                                    aria-expanded={openEditorMenu ? "true" : undefined}
-                                    className="text-white cursor-pointer"
-                                />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            id="basic-editor-menu" anchorEl={editorAnchorEl}
-                            open={openEditorMenu} onClose={handleEditorMenuClose}
-                            MenuListProps={{ "aria-labelledby": "basic-editor-button" }} elevation={0}
-                            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                            transformOrigin={{ vertical: "top", horizontal: "right" }}
-                            slotProps={{
-                                paper: {
-                                    elevation: 0,
-                                    sx: { color: "white", bgcolor: `${colors["secondary-bg"]}` },
-                                },
-                            }}
-                        >
-                            <CustomMenuItem title="Font Size" id="fontSizesOptions" value={fontSize} valuesArray={FONTSIZES} handlevalueChange={handleFontSizeChange} />
-                            <CustomMenuItem title="Indent" id="indentSizesOptions" value={indentSize} valuesArray={INDENTSIZES} handlevalueChange={handleIndentSizeChange} />
-                            <CustomMenuItem title="Tab Size" id="tabSizesOptions" value={tabSize} valuesArray={TABSIZES} handlevalueChange={handleTabSizeChange} />
-                        </Menu>
+                        <CustomMenu
+                            tooltip="Editor Settings" anchorEl={editorAnchorEl}
+                            openMenu={openEditorMenu} handleOpenMenu={handleEditorMenuOpen} handleCloseMenu={handleEditorMenuClose}
+                            anchorOrigin={{ vertical: "bottom", horizontal: "center" }} transformOrigin={{ vertical: "top", horizontal: "right" }}
+                            icon={<MoreVert className="text-white" />}
+                            children={
+                                <div>
+                                    <CustomMenuItem title="Font Size" id="fontSizesOptions" value={fontSize} valuesArray={FONTSIZES} handlevalueChange={handleFontSizeChange} />
+                                    <CustomMenuItem title="Indent" id="indentSizesOptions" value={indentSize} valuesArray={INDENTSIZES} handlevalueChange={handleIndentSizeChange} />
+                                    <CustomMenuItem title="Tab Size" id="tabSizesOptions" value={tabSize} valuesArray={TABSIZES} handlevalueChange={handleTabSizeChange} />
+                                </div>
+                            } styling={{ color: "white", bgcolor: `${colors["secondary-bg"]}` }}
+                        />
                     </div>
                 </div>
                 <Editor
@@ -379,23 +342,14 @@ const EditorPage = () => {
                 </div>
             </div>
             {/* Right side-panel */}
-            <IconButton
-                color="inherit"
-                edge="end"
-                onClick={handleChatDrawerOpen}
-                sx={[
-                    { mr: 0, mt: 1.25, height: "40px", color: "white" },
-                    openChat && { display: "none" },
-                ]}
-            >
-                <Tooltip title="Show Chat">
-                    <lord-icon
-                        src="https://cdn.lordicon.com/wzrwaorf.json"
-                        trigger="loop" delay="1000" colors="primary:white,secondary:white"
-                        style={{ width: "50px", height: "50px", }}
-                    />
-                </Tooltip>
-            </IconButton>
+            <Tooltip title="Show Chat" className="cursor-pointer">
+                <lord-icon
+                    src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
+                    colors="primary:white,secondary:white"
+                    style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
+                    onClick={handleChatDrawerOpen}
+                />
+            </Tooltip>
             <Drawer
                 sx={{
                     width: chatDrawerWidth, flexShrink: 0,
@@ -405,7 +359,7 @@ const EditorPage = () => {
                 anchor="right" variant="persistent"
                 open={openChat}
             >
-                <div className="flex items-center justify-start py-[17px] text-white bg-primary-bg">
+                <div className="flex items-center justify-start py-[17px] border-b-2 border-white text-white bg-primary-bg">
                     <Tooltip title="Hide Chat">
                         <LogoutRounded onClick={handleChatDrawerClose} className="ml-3 cursor-pointer z-10" />
                     </Tooltip>
@@ -413,49 +367,39 @@ const EditorPage = () => {
                 </div>
                 <div id="chatWindow" className="w-full h-[calc(100vh-100px)] p-2 overflow-y-scroll bg-primary-bg"></div>
                 <div className="h-[104px] py-[10px] flex flex-col gap-2 bg-primary-bg">
-                    <input
-                        id="chatInput" type="text" placeholder="Type your message"
-                        onKeyUp={handleChatInput} autoComplete="off" ref={chatInputField}
-                        className="mx-2 p-2 rounded-md outline-primary-accent-500 outline-1 text-primary-accent-800 selection:bg-primary-accent-800 selection:text-white"
+                    <LogoInput
+                        type="text" placeholder="Type your message" value={chatMessage} inputRef={chatInputField}
+                        handleChangeFunction={(e) => setChatMessage(e.target.value)} handleKeyUp={handleChatInput}
+                        styling="mx-2 p-2" autoComplete="off"
+                        logo={
+                            <Tooltip title="Disabled">
+                                <EmojiEmotions className="mr-2 cursor-pointer text-primary-bg" />
+                            </Tooltip>
+                        }
                     />
                     <div className="mr-2 flex gap-2 justify-end items-center">
-                        <Tooltip title="Chat Settings">
-                            <IconButton onClick={handleChatMenuClick}>
-                                <Settings
-                                    id="basic-chat-button" aria-haspopup="true"
-                                    aria-controls={openChatMenu ? "basic-chat-menu" : undefined}
-                                    aria-expanded={openChatMenu ? "true" : undefined}
-                                    className="text-white cursor-pointer"
-                                />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            id="basic-chat-menu" anchorEl={chatAnchorEl}
-                            open={openChatMenu} onClose={handleChatMenuClose}
-                            MenuListProps={{ "aria-labelledby": "basic-chat-button" }} elevation={0}
-                            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                            transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-                            slotProps={{
-                                paper: {
-                                    elevation: 0,
-                                    sx: { color: "white", bgcolor: `${colors["secondary-bg"]}` },
-                                },
-                            }}
-                        >
-                            <MenuItem
-                                onClick={() => { handleChatMenuClose(); handleChatDrawerClose(); }}
-                                className="w-52 !text-sm !py-1 flex !justify-between"
-                            >
-                                Hide chat
-                            </MenuItem>
-                            <MenuItem className="w-52 !text-sm !py-1 flex !justify-between">
-                                Chat Anonymously
-                                <Switch checked={anonymous} size="small" onClick={handleAnonymousClick} />
-                            </MenuItem>
-                        </Menu>
+                        <CustomMenu
+                            tooltip="Chat Settings" anchorEl={chatAnchorEl}
+                            openMenu={openChatMenu} handleOpenMenu={handleChatMenuOpen} handleCloseMenu={handleChatMenuClose}
+                            icon={<Settings className="text-white" />}
+                            children={
+                                <div>
+                                    <MenuItem
+                                        onClick={() => { handleChatMenuClose(); handleChatDrawerClose(); }}
+                                        className="w-52 !text-sm !py-1 flex !justify-between"
+                                    >
+                                        Hide chat
+                                    </MenuItem>
+                                    <div className="py-[4px] px-[16px] w-52 text-sm flex justify-between items-center">
+                                        Chat Anonymously
+                                        <Switch checked={anonymous} size="small" onClick={handleAnonymousClick} />
+                                    </div>
+                                </div>
+                            } styling={{ color: "white", bgcolor: `${colors["secondary-bg"]}` }}
+                        />
                         <button
                             onClick={sendMessage}
-                            className="uppercase px-2.5 py-1 rounded-md bg-primary-accent-700 text-white"
+                            className="uppercase px-2.5 py-1 rounded-md outline-none bg-primary-accent-700 text-white"
                         >
                             Send
                         </button>

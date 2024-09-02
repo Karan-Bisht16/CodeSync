@@ -1,6 +1,7 @@
 const cors = require("cors");
 const http = require("http");
-// const path = require("path");
+const axios = require("axios");
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const { Server } = require("socket.io");
@@ -14,6 +15,7 @@ app.use(cors({
     credentials: true,
     optionsSuccessStatus: 200,
 }));
+app.use(express.json());
 
 const io = new Server(server);
 
@@ -75,6 +77,44 @@ io.on("connection", (socket) => {
 
 app.get("/pingServer", (req, res) => {
     return res.status(200).json(true);
+});
+
+app.post("/executeCode", async (req, res) => {
+    const { LanguageChoice, Program, Input } = req.body;
+
+    const encodedParams = new URLSearchParams();
+    encodedParams.append("LanguageChoice", LanguageChoice);
+    encodedParams.append("Program", Program);
+    encodedParams.append("Input", Input);
+
+    const options = {
+        method: "POST",
+        url: "https://code-compiler.p.rapidapi.com/v2",
+        headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            "X-RapidAPI-Key": process.env.CODE_COMPILER_API_KEY,
+            "X-RapidAPI-Host": "code-compiler.p.rapidapi.com",
+        },
+        data: encodedParams,
+    };
+    try {
+        const response = await axios.request(options);
+        let message = response.data.Result;
+        let error = false;
+        if (message === null) {
+            message = response.data.Errors;
+            error = true;
+        }
+        return res.status(200).json({ message, error });
+    } catch (error) {
+        let message;
+        if (error.status === 504 && error?.response?.statusText === "Gateway Time-out") {
+            message = "Timeout exception. Check your code.";
+        } else {
+            message = "Something went wrong, Please check your code and input.";
+        }
+        return res.status(200).json({ message, error: true });
+    }
 });
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

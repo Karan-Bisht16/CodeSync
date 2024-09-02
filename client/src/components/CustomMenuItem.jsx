@@ -1,8 +1,6 @@
-import { MenuItem } from "@mui/material";
-
 const CustomMenuItem = ({ title, id, value, valuesArray, handlevalueChange }) => {
     return (
-        <MenuItem className="w-52 !text-sm !py-1 flex !justify-between">
+        <div className="py-[4px] px-[16px] w-52 text-sm flex justify-between items-center select-none">
             <span className="cursor-default">{title}</span>
             <select
                 id={id} defaultValue={value} onChange={handlevalueChange}
@@ -12,7 +10,7 @@ const CustomMenuItem = ({ title, id, value, valuesArray, handlevalueChange }) =>
                     <option key={value} value={value} className="text-black">{`${value}px`}</option>
                 ))}
             </select>
-        </MenuItem>
+        </div>
     );
 };
 

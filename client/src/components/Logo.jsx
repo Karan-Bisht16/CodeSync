@@ -15,6 +15,15 @@ const Logo = ({ color }) => {
             />
         </div>
     );
+}
+
+const LogoWithTitle = ({ color, styling }) => {
+    return (
+        <div className={`font-blinker text-primary-accent-500 text-3xl font-semibold flex justify-center items-center ${styling}`}>
+            <Logo color={color} />
+            &lt; CodeSync &gt;
+        </div>
+    );
 };
 
-export default Logo;
+export { Logo, LogoWithTitle };
