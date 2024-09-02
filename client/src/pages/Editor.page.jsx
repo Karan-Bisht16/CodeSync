@@ -372,6 +372,13 @@ const EditorPage = () => {
                     anonymous={anonymous} handleAnonymousClick={handleAnonymousClick}
                 />
             </Drawer>
+            <div className="grid grid-cols-2 gap-1 my-2 md:hidden">
+                <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="ml-2 text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
+                <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" styling="mr-2 text-gray-400 bg-secondary-bg hover:bg-primary-bg" />
+                <SidebarButton buttonFunction={toggleWhiteboard} title="Open Whiteboard" styling="col-span-2 mx-auto text-white bg-secondary-bg hover:bg-primary-bg" />
+                <SidebarButton buttonFunction={leaveRoom} title="Leave Room" logo={<ClearRounded />} styling="col-span-2 mx-auto text-[#ff2d2d] hover:text-white bg-secondary-bg hover:bg-[#f54c4c]" />
+            </div>
+
         </div>
     );
 }
