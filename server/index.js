@@ -20,8 +20,8 @@ app.use(express.json());
 const io = new Server(server);
 
 const userSocketMap = {};
-const getAllConnectedClients = (roomId) => {
-    return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
+const getAllConnectedClients = (roomID) => {
+    return Array.from(io.sockets.adapter.rooms.get(roomID) || []).map(
         (socketId) => {
             return {
                 socketId,
@@ -34,10 +34,10 @@ const getAllConnectedClients = (roomId) => {
 
 io.on("connection", (socket) => {
     console.log(`Socket connected with id: ${socket.id}`);
-    socket.on(ACTIONS.JOIN, ({ roomId, username, userColor }) => {
+    socket.on(ACTIONS.JOIN, ({ roomID, username, userColor }) => {
         userSocketMap[socket.id] = { username, userColor };
-        socket.join(roomId);
-        const clients = getAllConnectedClients(roomId);
+        socket.join(roomID);
+        const clients = getAllConnectedClients(roomID);
         // notify that new user join
         clients.forEach(({ socketId }) => {
             io.to(socketId).emit(ACTIONS.JOINED, {
@@ -50,11 +50,11 @@ io.on("connection", (socket) => {
     });
 
     // sync the code
-    socket.on(ACTIONS.CODE_CHANGE, ({ roomId, code }) => {
-        socket.in(roomId).emit(ACTIONS.CODE_CHANGE, { code });
+    socket.on(ACTIONS.CODE_CHANGE, ({ roomID, code }) => {
+        socket.in(roomID).emit(ACTIONS.CODE_CHANGE, { code });
     });
-    socket.on(ACTIONS.SEND_MESSAGE, ({ roomId, message }) => {
-        socket.in(roomId).emit(ACTIONS.SEND_MESSAGE, { message });
+    socket.on(ACTIONS.SEND_MESSAGE, ({ roomID, message }) => {
+        socket.in(roomID).emit(ACTIONS.SEND_MESSAGE, { message });
     });
     // when new user join the room all the code which are there are also shows on that persons editor
     socket.on(ACTIONS.SYNC_CODE, ({ socketId, code }) => {
@@ -64,8 +64,8 @@ io.on("connection", (socket) => {
     socket.on("disconnecting", () => {
         const rooms = [...socket.rooms];
         // leave all the room
-        rooms.forEach((roomId) => {
-            socket.in(roomId).emit(ACTIONS.DISCONNECTED, {
+        rooms.forEach((roomID) => {
+            socket.in(roomID).emit(ACTIONS.DISCONNECTED, {
                 socketId: socket.id,
                 username: userSocketMap[socket.id]?.username,
             });
