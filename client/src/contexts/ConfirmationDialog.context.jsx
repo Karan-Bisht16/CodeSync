@@ -27,7 +27,7 @@ export const ConfirmationDialogProvider = ({ children }) => {
             case 1:
                 setLinearProgressBar(true);
                 const { navigate } = dialogValue.rest;
-                navigate("/");
+                navigate("/room");
                 closeDialog();
                 break;
             default:

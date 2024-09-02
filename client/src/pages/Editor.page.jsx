@@ -16,7 +16,7 @@ import { ConfirmationDialogContext } from "../contexts/ConfirmationDialog.contex
 // importing utils
 import { initSocket } from "../utils/socket";
 import { executeCode } from "../utils/api";
-// importing theme
+// importing themes
 import { colors } from "../constants/Themes";
 // importing constants
 import { ACTIONS } from "../constants/Actions";
@@ -35,7 +35,7 @@ const EditorPage = () => {
     const [clients, setClients] = useState([]);
 
     if (!location.state && !location.state.username && !location.state.userColor) {
-        return <Navigate to="/" />;
+        return <Navigate to="/room" />;
     }
 
     useEffect(() => {
