@@ -19,7 +19,7 @@ const Logo = ({ color }) => {
 
 const LogoWithTitle = ({ color, styling }) => {
     return (
-        <div className={`font-blinker text-primary-accent-500 text-3xl font-semibold flex justify-center items-center ${styling}`}>
+        <div style={{ color }} className={`font-blinker min-w-[220px] text-2xl md:text-3xl font-semibold flex justify-center items-center ${styling}`}>
             <Logo color={color} />
             &lt; CodeSync &gt;
         </div>

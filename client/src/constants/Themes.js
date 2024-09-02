@@ -16,12 +16,15 @@ const colors = {
     "secondary-bg": "#2f363b",
     "tertiary-bg": "#22292F",
     "board-bg": "#282a36",
+    "card-bg": "#29343D",
+
 };
 
 const fontFamily = {
     jost: ["Jost"],
     monospace: ["Inconsolata"],
     blinker: ["Blinker"],
+    blackOpsOne: ["Black Ops One",]
 };
 
 const theme = {

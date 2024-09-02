@@ -10,7 +10,7 @@ import { checkServerAvailibility } from "../utils/api";
 // importing theme
 import { colors, userThemes } from "../constants/Themes";
 // importing assets
-import imgBackground from "../assets/img-background.jpg";
+import imgBackground from "../assets/img-background-2.jpg";
 
 const Room = () => {
     const navigate = useNavigate();
@@ -72,8 +72,8 @@ const Room = () => {
     return (
         <div className="h-screen w-screen flex flex-col justify-center select-none">
             {/* shadow-[2px_30px_75px_0_rgba(60,86,101,1)] */}
-            <div className="h-[85%] w-[90%] max-h-[600px] max-w-[1080px] grid grid-cols-2 gap-8 mx-auto bg-primary-bg rounded-lg shadow-[2px_4px_25px_0_rgba(60,86,101,1)]">
-                <div className="flex justify-center items-center" >
+            <div className="h-[85%] w-[95%] md:w-[90%] max-h-[600px] max-w-[1080px] flex md:grid md:grid-cols-2 items-center md:items-stretch gap-8 mx-auto bg-primary-bg rounded-lg shadow-[0_0_25px_0_rgba(60,86,101,1)] md:shadow-[2px_4px_25px_0_rgba(60,86,101,1)]">
+                <div className="hidden md:flex justify-center items-center" >
                     <div className="relative">
                         <div className="flex justify-center">
                             <img src={imgBackground} alt="background" className="w-[90%]" />
@@ -84,9 +84,9 @@ const Room = () => {
                         </div>
                     </div>
                 </div>
-                <div className="mx-8 my-12 p-8 rounded-lg bg-secondary-bg">
+                <div className="w-full md:w-auto mx-4 md:mx-8 my-12 px-4 py-8 md:px-8 rounded-lg bg-secondary-bg">
                     <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} />
-                    <div className="flex flex-col gap-3 mt-12">
+                    <div className="flex flex-col gap-3 mt-8">
                         <LogoInput
                             type="text" placeholder="Enter room ID" value={roomID} inputRef={roomIDField}
                             handleChangeFunction={(e) => setRoomID(e.target.value)} handleKeyUp={handleInputEnter}
@@ -122,7 +122,8 @@ const Room = () => {
                             <hr className="absolute w-full top-[50%] z-0" />
                         </div>
                         <p className="text-center text-white">
-                            Don't have an invite? Create a&nbsp;
+                            Don't have an invite?&nbsp;
+                            <br className="inline-block md:hidden" />Create a&nbsp;
                             <a onClick={createNewRoom} href="" className="text-primary-accent-500 hover:text-primary-accent-600">
                                 new room
                             </a>
@@ -132,9 +133,9 @@ const Room = () => {
             </div>
             {loading &&
                 <div className="h-screen w-screen fixed top-0 left-0 flex justify-center items-center z-10">
-                    <div className="h-screen w-screen fixed top-0 left-0 opacity-15 bg-black">
+                    <div className="h-screen w-screen fixed top-0 left-0 opacity-25 bg-black">
                     </div>
-                    <div className=" h-1/2 w-1/2 flex flex-col justify-center items-center rounded-md bg-tertiary-bg">
+                    <div className="h-1/3 md:h-1/2 w-[85%] md:w-1/2 flex flex-col justify-center items-center rounded-md bg-tertiary-bg">
                         <lord-icon
                             src="https://cdn.lordicon.com/zvheymqn.json" trigger="loop"
                             colors={`primary:${colors["primary-accent"]["400"]},secondary:white`}
@@ -142,7 +143,11 @@ const Room = () => {
                         />
                         <div className="text-white relative -top-5 text-center">
                             <p className="font-blinker text-3xl">Getting you ready!</p>
-                            <span className="text-sm">This dealy is due to render server inactivity. Please be patient</span>
+                            <span className="text-sm">
+                                This dealy is due to render server inactivity.
+                                <br className="inline-block md:hidden" />
+                                Please be patient.
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -1,15 +1,15 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import { Drawer, MenuItem, Switch, Tooltip } from "@mui/material";
-import { ClearRounded, EmojiEmotions, FilterFramesRounded, LogoutRounded, MoreVert, PlayArrowRounded, Settings } from "@mui/icons-material";
+import { Drawer, Tooltip } from "@mui/material";
+import { ClearRounded, FilterFramesRounded, MoreVert, PlayArrowRounded } from "@mui/icons-material";
 // importing components
 import { LogoWithTitle } from "../components/Logo";
 import { SidebarButton } from "../components/Buttons";
-import { LogoInput } from "../components/Inputs";
 import CustomMenu from "../components/CustomMenu";
 import CustomMenuItem from "../components/CustomMenuItem";
 import Client from "../components/Client";
+import Clients from "../components/Clients";
 import Editor from "../components/Editor";
 // importing contexts
 import { ConfirmationDialogContext } from "../contexts/ConfirmationDialog.context";
@@ -21,6 +21,7 @@ import { colors } from "../constants/Themes";
 // importing constants
 import { ACTIONS } from "../constants/Actions";
 import { LANGUAGES, FONTSIZES, INDENTSIZES, TABSIZES } from "../constants/Editor";
+import ChatSidebar from "../components/ChatSidebar";
 
 const chatDrawerWidth = "27.5%";
 
@@ -34,7 +35,7 @@ const EditorPage = () => {
     const codeRef = useRef(null);
     const [clients, setClients] = useState([]);
 
-    if (!location.state && !location.state.username && !location.state.userColor) {
+    if (!location.state && !location.state?.username && !location.state?.userColor) {
         return <Navigate to="/room" />;
     }
 
@@ -260,25 +261,27 @@ const EditorPage = () => {
 
     useEffect(() => {
         const codeMirror = document.querySelector(".CodeMirror");
-        codeMirror.style.cssText = "height: 69vh; overflow-y: scroll; work-break: break-all;"
         codeMirror.style.fontSize = `${fontSize}px`
     }, [fontSize]);
 
     return (
-        <div className="flex select-none">
+        <div className="flex flex-col md:flex-row select-none">
             {/* Left side-panel */}
-            <div className="h-screen min-w-64 w-64 flex flex-col justify-between">
-                <div className="text-white">
-                    <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="mt-3 mr-2" />
-                    <hr className="w-[87.5%] mx-auto mt-2 mb-1.5" />
-                    <h3 className="text-center">Participants</h3>
-                    <div className="px-2 py-1">
+            <div className="md:h-screen min-w-64 w-64 py-2 md:flex md:flex-col justify-between">
+                <div className="w-screen md:w-auto flex justify-between md:block text-white">
+                    <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="md:mt-3 md:mr-2 !justify-start md:!justify-center" />
+                    <hr className="hidden md:block w-[87.5%] mx-auto mt-2 mb-1.5" />
+                    <h3 className="hidden md:block text-center">Participants</h3>
+                    <div className="hidden md:block px-2 py-1">
                         {clients.map((client) => (
                             <Client key={client.socketId} me={location.state.username} username={client.username} userColor={client.userColor} />
                         ))}
                     </div>
+                    <div className="mr-2 py-2 flex items-center md:hidden absolute right-0">
+                        <Clients clients={clients} me={location.state.username} />
+                    </div>
                 </div>
-                <div className="flex flex-col gap-2 items-center p-2">
+                <div className="hidden md:flex flex-col gap-2 items-center p-2">
                     <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
                     <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" logo={
                         <lord-icon
@@ -291,7 +294,7 @@ const EditorPage = () => {
                 </div>
             </div>
             {/* Editor panel */}
-            <div className={`bg-slate-600 w-full ${openChat ? "max-w-[calc(72.5%-256px)]" : "max-w-[calc(100%-256px)]"} p-2 flex flex-col justify-between`}>
+            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} p-2 flex flex-col justify-between`}>
                 <div className="flex justify-between items-center py-0.5">
                     <div className="relative border-b-2 w-48">
                         <select
@@ -324,7 +327,7 @@ const EditorPage = () => {
                     onCodeChange={(code) => { codeRef.current = code }}
                     languageIndex={languageIndex} tabSize={tabSize} indentUnit={indentSize}
                 />
-                <div className="h-[calc(30vh-52.5px)]">
+                <div className="h-[calc(45vh-130px)] md:h-[calc(30vh-52.5px)]">
                     <div className="my-2 text-gray-300">
                         <label id="inputLabel" onClick={inputClicked}
                             className="clickedLabel py-1 px-2 mr-1 rounded-md cursor-pointer"
@@ -337,74 +340,37 @@ const EditorPage = () => {
                     <textarea
                         id="inputValues" rows={6}
                         placeholder="Enter your input here"
-                        className="inputArea w-full px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
+                        className="inputArea w-full h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
                     ></textarea>
                 </div>
             </div>
             {/* Right side-panel */}
-            <Tooltip title="Show Chat" className="cursor-pointer">
-                <lord-icon
-                    src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
-                    colors="primary:white,secondary:white"
-                    style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
-                    onClick={handleChatDrawerOpen}
-                />
-            </Tooltip>
+            <div className="hidden md:block">
+                <Tooltip title="Show Chat" className="cursor-pointer">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
+                        colors="primary:white,secondary:white"
+                        style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
+                        onClick={handleChatDrawerOpen}
+                    />
+                </Tooltip>
+            </div>
             <Drawer
                 sx={{
                     width: chatDrawerWidth, flexShrink: 0,
                     display: openChat ? "block" : "none",
+                    // display: { xs: "none", md: openChat ? "block" : "none" },
                     "& .MuiDrawer-paper": { width: chatDrawerWidth, bgcolor: `${colors["secondary-bg"]}` },
                 }}
                 anchor="right" variant="persistent"
                 open={openChat}
             >
-                <div className="flex items-center justify-start py-[17px] border-b-2 border-white text-white bg-primary-bg">
-                    <Tooltip title="Hide Chat">
-                        <LogoutRounded onClick={handleChatDrawerClose} className="ml-3 cursor-pointer z-10" />
-                    </Tooltip>
-                    <p className="w-full absolute text-center text-lg z-0">Live Chat</p>
-                </div>
-                <div id="chatWindow" className="w-full h-[calc(100vh-100px)] p-2 overflow-y-scroll bg-primary-bg"></div>
-                <div className="h-[104px] py-[10px] flex flex-col gap-2 bg-primary-bg">
-                    <LogoInput
-                        type="text" placeholder="Type your message" value={chatMessage} inputRef={chatInputField}
-                        handleChangeFunction={(e) => setChatMessage(e.target.value)} handleKeyUp={handleChatInput}
-                        styling="mx-2 p-2" autoComplete="off"
-                        logo={
-                            <Tooltip title="Disabled">
-                                <EmojiEmotions className="mr-2 cursor-pointer text-primary-bg" />
-                            </Tooltip>
-                        }
-                    />
-                    <div className="mr-2 flex gap-2 justify-end items-center">
-                        <CustomMenu
-                            tooltip="Chat Settings" anchorEl={chatAnchorEl}
-                            openMenu={openChatMenu} handleOpenMenu={handleChatMenuOpen} handleCloseMenu={handleChatMenuClose}
-                            icon={<Settings className="text-white" />}
-                            children={
-                                <div>
-                                    <MenuItem
-                                        onClick={() => { handleChatMenuClose(); handleChatDrawerClose(); }}
-                                        className="w-52 !text-sm !py-1 flex !justify-between"
-                                    >
-                                        Hide chat
-                                    </MenuItem>
-                                    <div className="py-[4px] px-[16px] w-52 text-sm flex justify-between items-center">
-                                        Chat Anonymously
-                                        <Switch checked={anonymous} size="small" onClick={handleAnonymousClick} />
-                                    </div>
-                                </div>
-                            } styling={{ color: "white", bgcolor: `${colors["secondary-bg"]}` }}
-                        />
-                        <button
-                            onClick={sendMessage}
-                            className="uppercase px-2.5 py-1 rounded-md outline-none bg-primary-accent-700 text-white"
-                        >
-                            Send
-                        </button>
-                    </div>
-                </div>
+                <ChatSidebar
+                    handleChatDrawerClose={handleChatDrawerClose} chatMessage={chatMessage} setChatMessage={setChatMessage} sendMessage={sendMessage}
+                    chatInputField={chatInputField} handleChatInput={handleChatInput} chatAnchorEl={chatAnchorEl}
+                    openChatMenu={openChatMenu} handleChatMenuOpen={handleChatMenuOpen} handleChatMenuClose={handleChatMenuClose}
+                    anonymous={anonymous} handleAnonymousClick={handleAnonymousClick}
+                />
             </Drawer>
         </div>
     );
