@@ -24,9 +24,7 @@ objective of the Real-time Code Collaboration Platform is to create an interacti
 
 **Features implemented so far:**
 1. A basic prototype with a responsive and modern UI.
-
 2. Data modeling for rooms and users.
-
 3. Implemented Socket.IO for code synchronization and chat functionalities:
 <ul type="none">
     <li>
@@ -55,9 +53,7 @@ objective of the Real-time Code Collaboration Platform is to create an interacti
 
 **Features to be Implemented in the Future:**
 - **Persistent Storage:** Permanent code storage in MongoDB with user Authentication.
-
 - **Screen Lock:** The room creator will be able to lock the screen, allowing only them to edit the code while others can only view.
-
 - **Room Lock:** Lock the number of participants, with a premium feature for more than 50 participants.
 
 ## Tech Stack
@@ -66,11 +62,9 @@ objective of the Real-time Code Collaboration Platform is to create an interacti
     - **React:** For easy development of component-based websites.
     - **Tailwind CSS:** For styling.
         - **Why Tailwind CSS?** Offers flexibility, PurgeCSS, and faster development.
-
 - **Backend:**
     - **Node with Express:** To build the server-side of the application.
     - **Socket.IO:** Enables real-time, two-way communication between a client and a server.
-        
 - **Deployment:**
     - **Frontend:** Vercel
     - **Backend:** Render
@@ -90,14 +84,11 @@ objective of the Real-time Code Collaboration Platform is to create an interacti
 
 1. **Enhanced Learning Experience:**
    Allows instructors and students to code together in real-time. Ideal for educational institutions, coding bootcamps, and peer study groups.
-
 2. **Debugging and understanding:**
    Helps user debug code collectively to understand the impact of their code changes.
-
 3. **Remote Accessibility:**
    As a web-based platform, it can be accessed from anywhere, making it suitable for remote learning and distributed teams.<br />
    Easy setup, no sign-up or download required.
-
 4. **Practical Use Cases:**
    Suitable for conducting coding interviews, live coding sessions, and pair programming exercises.<br />
    It can also be used for collaborative coding competitions or hackathons, where real-time coordination is key.
