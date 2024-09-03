@@ -1,19 +1,26 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // importing components
 import { LogoWithTitle } from "../components/Logo";
-// importing themes
-import { colors } from "../constants/Themes";
+// importing utils
+import { checkServerAvailibility } from "../utils/api";
 // importing assets
 import imgBackground from "../assets/img-background-1.png";
 
 const Home = () => {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const preCheck = async () => {
+            await checkServerAvailibility();
+        }
+        preCheck();
+    }, []);
+
     return (
         <div className="h-screen w-screen flex justify-center items-center select-none text-white">
             <div className="w-[95%] md:w-[90%] p-4 md:p-8 flex flex-col md:grid md:grid-cols-5 gap-2 md:gap-8 bg-card-bg">
                 <div className="col-span-3">
-                    {/* <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="!justify-start" /> */}
                     <LogoWithTitle color="white" styling="!justify-start" />
                     <div className="ml-2 mb-8 md:mb-12">
                         <p className="font-blackOpsOne pt-2.5 md:pt-5 text-2xl md:text-4xl lg:text-5xl 2xl:text-[71px]">A Real-Time Code Collaboration Tool</p>

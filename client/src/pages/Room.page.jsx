@@ -144,7 +144,7 @@ const Room = () => {
                         <div className="text-white relative -top-5 text-center">
                             <p className="font-blinker text-3xl">Getting you ready!</p>
                             <span className="text-sm">
-                                This dealy is due to render server inactivity.
+                                This dealy is due to render server inactivity.&nbsp;
                                 <br className="inline-block md:hidden" />
                                 Please be patient.
                             </span>
