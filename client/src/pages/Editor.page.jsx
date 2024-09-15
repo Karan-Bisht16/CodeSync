@@ -267,7 +267,7 @@ const EditorPage = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row select-none">
+        <div className="flex flex-col md:flex-row mb-[65px] select-none">
             {/* Left side-panel */}
             <div className="md:h-screen min-w-64 w-64 py-2 md:flex md:flex-col justify-between">
                 <div className="w-screen md:w-auto flex justify-between md:block text-white">

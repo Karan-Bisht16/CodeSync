@@ -58,7 +58,7 @@ const Clients = ({ clients, me }) => {
         <>
             <Global
                 styles={{
-                    ".MuiDrawer-root > .MuiPaper-root.MuiPaper-elevation16.MuiDrawer-paperAnchorBottom.css-dl7nww-MuiPaper-root-MuiDrawer-paper": {
+                    ".MuiDrawer-root > .MuiPaper-root.MuiPaper-elevation16.MuiDrawer-paperAnchorBottom": {
                         height: `calc(100% - ${drawerHeight}px)`,
                         overflow: "visible",
                     },
