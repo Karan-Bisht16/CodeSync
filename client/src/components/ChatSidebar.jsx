@@ -19,7 +19,8 @@ const ChatSidebar = (props) => {
                 </Tooltip>
                 <p className="w-full absolute text-center text-lg z-0">Live Chat</p>
             </div>
-            <div id="chatWindow" className="w-full h-[calc(100vh-100px)] p-2 overflow-y-scroll bg-primary-bg"></div>
+            {/* <div id="chatWindow" className="w-full h-[calc(100vh-100px)] p-2 overflow-y-scroll bg-primary-bg"></div> */}
+            <div id="chatWindow" className="w-full h-full p-2 overflow-y-scroll bg-primary-bg"></div>
             <div className="h-[104px] py-[10px] flex flex-col gap-2 bg-primary-bg">
                 <LogoInput
                     type="text" placeholder="Type your message" value={chatMessage} inputRef={chatInputField}

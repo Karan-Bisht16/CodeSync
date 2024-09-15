@@ -354,14 +354,14 @@ const EditorPage = () => {
                         src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
                         colors="primary:white,secondary:white"
                         style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
-                        onClick={() => handleChatDrawerOpen("27.5%")}
+                        onClick={async () => { await handleChatDrawerOpen("27.5%"); chatInputField.current.focus(); }}
                     />
                 </Tooltip>
             </div>
             <Drawer
                 id="chat-drawer"
                 sx={{
-                    width: chatDrawerWidth, flexShrink: 0,
+                    width: chatDrawerWidth, flexShrink: 0, height: "100vh",
                     display: openChat ? "block" : "none",
                     "& .MuiDrawer-paper": { width: chatDrawerWidth, bgcolor: `${colors["secondary-bg"]}` },
                 }}
