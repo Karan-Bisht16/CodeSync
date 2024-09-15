@@ -9,7 +9,7 @@ const Client = ({ me, username, userColor, styling }) => {
     };
 
     return (
-        <div className={`px-2 py-1 flex gap-2 items-center select-none ${styling}`}>
+        <div className={`px-2 flex gap-2 md:py-2 md:ml-2 md:mb-2 md:border-b-4 md:border-r-4 md:border-gray-700 rounded-lg items-center select-none ${styling}`}>
             <Tooltip title={`${username} ${me === username ? "(me)" : ""}`}>
                 <Avatar sx={avatarStyling}>{username.charAt(0)}</Avatar>
             </Tooltip>

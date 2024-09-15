@@ -63,8 +63,8 @@ const Room = () => {
         setLoading(false);
     };
 
-    const handleInputEnter = (e) => {
-        if (e.code === "Enter") {
+    const handleInputEnter = (key) => {
+        if (key.keyCode === 13) {
             joinRoom();
         }
     };

@@ -53,6 +53,9 @@ io.on("connection", (socket) => {
     socket.on(ACTIONS.CODE_CHANGE, ({ roomID, code }) => {
         socket.in(roomID).emit(ACTIONS.CODE_CHANGE, { code });
     });
+    // socket.on(ACTIONS.CURSOR_MOVED, ({ roomID, line, ch, username, userColor }) => {
+    //     socket.in(roomID).emit(ACTIONS.CURSOR_MOVED, { line, ch, username, userColor });
+    // });
     socket.on(ACTIONS.SEND_MESSAGE, ({ roomID, message }) => {
         socket.in(roomID).emit(ACTIONS.SEND_MESSAGE, { message });
     });
@@ -69,6 +72,7 @@ io.on("connection", (socket) => {
                 socketId: socket.id,
                 username: userSocketMap[socket.id]?.username,
             });
+            // socket.in(roomID).emit(ACTIONS.CURSOR_MOVED, { username: userSocketMap[socket.id]?.username, left: true });
         });
         delete userSocketMap[socket.id];
         socket.leave();

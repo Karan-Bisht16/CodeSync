@@ -3,11 +3,14 @@ import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom"
 import { toast } from "react-hot-toast";
 import { Drawer, Tooltip } from "@mui/material";
 import { ClearRounded, FilterFramesRounded, MoreVert, PlayArrowRounded } from "@mui/icons-material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 // importing components
 import { LogoWithTitle } from "../components/Logo";
 import { SidebarButton } from "../components/Buttons";
+import BottomNavigation from "../components/BottomNavigation";
 import CustomMenu from "../components/CustomMenu";
 import CustomMenuItem from "../components/CustomMenuItem";
+import ChatSidebar from "../components/ChatSidebar";
 import Client from "../components/Client";
 import Clients from "../components/Clients";
 import Editor from "../components/Editor";
@@ -21,9 +24,6 @@ import { colors } from "../constants/Themes";
 // importing constants
 import { ACTIONS } from "../constants/Actions";
 import { LANGUAGES, FONTSIZES, INDENTSIZES, TABSIZES } from "../constants/Editor";
-import ChatSidebar from "../components/ChatSidebar";
-
-const chatDrawerWidth = "27.5%";
 
 const EditorPage = () => {
     const { roomID } = useParams();
@@ -59,19 +59,15 @@ const EditorPage = () => {
             });
 
             // Listening for joined event
-            socketRef.current?.on(
-                ACTIONS.JOINED,
-                ({ clients, username, socketId }) => {
-                    if (username !== location.state.username) {
-                        toast.success(`${username} joined the room`);
-                    }
-                    setClients(clients);
-                    socketRef.current?.emit(ACTIONS.SYNC_CODE, {
-                        code: codeRef.current,
-                        socketId,
-                    });
+            socketRef.current?.on(ACTIONS.JOINED, ({ clients, username, socketId }) => {
+                if (username !== location.state.username) {
+                    toast.success(`${username} joined the room`);
                 }
-            );
+                setClients(clients);
+                socketRef.current?.emit(ACTIONS.SYNC_CODE, {
+                    socketId, code: codeRef.current,
+                });
+            });
 
             // Listeing for disconnected
             socketRef.current?.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
@@ -84,10 +80,14 @@ const EditorPage = () => {
             // Listening for message
             socketRef.current?.on(ACTIONS.SEND_MESSAGE, ({ message }) => {
                 const chatWindow = document.getElementById("chatWindow");
+                const chatDrawer = document.getElementById("chat-drawer");
                 let currText = chatWindow.innerHTML;
                 currText += message;
                 chatWindow.innerHTML = currText;
                 chatWindow.scrollTop = chatWindow.scrollHeight;
+                if (getComputedStyle(chatDrawer).display === "none") {
+                    setUnreadMessages(true);
+                }
             });
         };
         init();
@@ -97,7 +97,7 @@ const EditorPage = () => {
             socketRef.current?.off(ACTIONS.SEND_MESSAGE);
             socketRef.current?.disconnect();
         };
-    }, [location.state.username, roomID, navigate]);
+    }, [location.state.username, roomID]);
 
     const copyRoomID = async () => {
         try {
@@ -194,8 +194,15 @@ const EditorPage = () => {
     const handleEditorMenuClose = () => { setEditorAnchorEl(null) };
 
     // JS for Chat Drawer 
-    const [openChat, setOpenChat] = useState(true);
-    const handleChatDrawerOpen = () => { setOpenChat(true) };
+    const [chatDrawerWidth, setChatDrawerWidth] = useState("27.5%");
+    const [openChat, setOpenChat] = useState(useMediaQuery("(min-width: 600px)"));
+    // JS for Unread Messages
+    const [unreadMessages, setUnreadMessages] = useState(false);
+    const handleChatDrawerOpen = (drawerWidth) => {
+        setChatDrawerWidth(drawerWidth);
+        setOpenChat(true)
+        setUnreadMessages(false);
+    };
     const handleChatDrawerClose = () => { setOpenChat(false) };
 
     // JS for Chat
@@ -207,13 +214,13 @@ const EditorPage = () => {
         if (anonymous) {
             message =
                 `<p class="text-white break-words">
-                        <span className="text-gray-400">Anonymous</span>: ${chatMessage}
-                    </p>`
+                    <span className="text-gray-400">Anonymous</span>: ${chatMessage}
+                </p>`
         } else {
             message =
                 `<p class="text-white break-words">
-                        <span style="color: ${location.state.userColor};" >${location.state.username}</span>: ${chatMessage}
-                    </p>`
+                    <span style="color: ${location.state.userColor};" >${location.state.username}</span>: ${chatMessage}
+                </p>`
         }
         const chatWindow = document.getElementById("chatWindow");
         let currText = chatWindow.innerHTML;
@@ -224,7 +231,7 @@ const EditorPage = () => {
         setChatMessage("");
     };
     const handleChatInput = (key) => {
-        if (key.code === "Enter") {
+        if (key.keyCode === 13) {
             sendMessage();
         }
     };
@@ -259,11 +266,6 @@ const EditorPage = () => {
         handleEditorMenuClose();
     };
 
-    useEffect(() => {
-        const codeMirror = document.querySelector(".CodeMirror");
-        codeMirror.style.fontSize = `${fontSize}px`
-    }, [fontSize]);
-
     return (
         <div className="flex flex-col md:flex-row select-none">
             {/* Left side-panel */}
@@ -272,7 +274,7 @@ const EditorPage = () => {
                     <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="md:mt-3 md:mr-2 !justify-start md:!justify-center" />
                     <hr className="hidden md:block w-[87.5%] mx-auto mt-2 mb-1.5" />
                     <h3 className="hidden md:block text-center">Participants</h3>
-                    <div className="hidden md:block px-2 py-1">
+                    <div className="hidden md:block px-2 py-1 max-h-[55vh] overflow-y-scroll">
                         {clients.map((client) => (
                             <Client key={client.socketId} me={location.state.username} username={client.username} userColor={client.userColor} />
                         ))}
@@ -323,11 +325,11 @@ const EditorPage = () => {
                     </div>
                 </div>
                 <Editor
-                    socketRef={socketRef} roomID={roomID}
+                    socketRef={socketRef} roomID={roomID} username={location.state.username} userColor={location.state.userColor}
                     onCodeChange={(code) => { codeRef.current = code }}
-                    languageIndex={languageIndex} tabSize={tabSize} indentUnit={indentSize}
+                    languageIndex={languageIndex} fontSize={fontSize} tabSize={tabSize} indentUnit={indentSize}
                 />
-                <div className="h-[calc(45vh-130px)] md:h-[calc(30vh-52.5px)]">
+                <div className="h-[calc(45vh-245px)] md:h-[calc(30vh-52.5px)]">
                     <div className="my-2 text-gray-300">
                         <label id="inputLabel" onClick={inputClicked}
                             className="clickedLabel py-1 px-2 mr-1 rounded-md cursor-pointer"
@@ -340,26 +342,27 @@ const EditorPage = () => {
                     <textarea
                         id="inputValues" rows={6}
                         placeholder="Enter your input here"
-                        className="inputArea w-full h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
+                        className="inputArea w-full h-[calc(100%-30px)] md:h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
                     ></textarea>
                 </div>
             </div>
             {/* Right side-panel */}
             <div className="hidden md:block">
+                {unreadMessages && <span className="w-2 h-2 mr-1 mt-1 rounded-full border-2 border-yellow-400 absolute right-0 z-20 bg-yellow-600" />}
                 <Tooltip title="Show Chat" className="cursor-pointer">
                     <lord-icon
                         src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
                         colors="primary:white,secondary:white"
                         style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
-                        onClick={handleChatDrawerOpen}
+                        onClick={() => handleChatDrawerOpen("27.5%")}
                     />
                 </Tooltip>
             </div>
             <Drawer
+                id="chat-drawer"
                 sx={{
                     width: chatDrawerWidth, flexShrink: 0,
                     display: openChat ? "block" : "none",
-                    // display: { xs: "none", md: openChat ? "block" : "none" },
                     "& .MuiDrawer-paper": { width: chatDrawerWidth, bgcolor: `${colors["secondary-bg"]}` },
                 }}
                 anchor="right" variant="persistent"
@@ -372,13 +375,18 @@ const EditorPage = () => {
                     anonymous={anonymous} handleAnonymousClick={handleAnonymousClick}
                 />
             </Drawer>
-            <div className="grid grid-cols-2 gap-1 my-2 md:hidden">
-                <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="ml-2 text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
-                <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" styling="mr-2 text-gray-400 bg-secondary-bg hover:bg-primary-bg" />
-                <SidebarButton buttonFunction={toggleWhiteboard} title="Open Whiteboard" styling="col-span-2 mx-auto text-white bg-secondary-bg hover:bg-primary-bg" />
-                <SidebarButton buttonFunction={leaveRoom} title="Leave Room" logo={<ClearRounded />} styling="col-span-2 mx-auto text-[#ff2d2d] hover:text-white bg-secondary-bg hover:bg-[#f54c4c]" />
+            <div className="grid grid-cols-2 gap-1 py-2 md:hidden bg-slate-600">
+                <div className="col-span-2 w-[95%] flex mx-auto gap-1">
+                    <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
+                    <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" styling="text-gray-200 bg-secondary-bg hover:bg-primary-bg" />
+                </div>
             </div>
-
+            <div className="md:hidden">
+                <BottomNavigation
+                    leaveRoom={leaveRoom} toggleWhiteboard={toggleWhiteboard}
+                    handleChatDrawerOpen={handleChatDrawerOpen} unreadMessages={unreadMessages}
+                />
+            </div>
         </div>
     );
 }

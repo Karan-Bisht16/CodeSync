@@ -42,7 +42,11 @@ body {
     overflow-y: scroll;
 }
 
-@media (max-width: 600px) {
+.CodeMirror-focused .CodeMirror-selected {
+    background: #165674;
+}
+
+@media (max-width: 768px) {
     .CodeMirror {
         height: 55vh;
         overflow-y: scroll;
