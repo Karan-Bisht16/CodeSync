@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import { useParams, useLocation, useNavigate, Navigate } from "react-router-dom";
-import { toast } from "react-hot-toast";
 import { Drawer, Tooltip } from "@mui/material";
-import { ClearRounded, FilterFramesRounded, MoreVert, PlayArrowRounded } from "@mui/icons-material";
+import { BackHand, BackHandOutlined, BackHandRounded, ClearRounded, FilterFramesRounded, MoreVert, PlayArrowRounded } from "@mui/icons-material";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { toast } from "react-hot-toast";
 // importing components
 import { LogoWithTitle } from "../components/Logo";
 import { SidebarButton } from "../components/Buttons";
@@ -64,17 +64,24 @@ const EditorPage = () => {
                     toast.success(`${username} joined the room`);
                 }
                 setClients(clients);
-                socketRef.current?.emit(ACTIONS.SYNC_CODE, {
-                    socketId, code: codeRef.current,
-                });
+                socketRef.current?.emit(ACTIONS.SYNC_CODE, { socketId, code: codeRef.current });
             });
 
             // Listeing for disconnected
-            socketRef.current?.on(ACTIONS.DISCONNECTED, ({ socketId, username }) => {
+            socketRef.current?.on(ACTIONS.DISCONNECTED, ({ updatedClients, username }) => {
                 toast.success(`${username} left the room`);
-                setClients((prev) => {
-                    return prev.filter((client) => client.socketId !== socketId);
-                });
+                setClients(updatedClients);
+            });
+
+            socketRef.current?.on(ACTIONS.TYPING, ({ socketID, username }) => {
+                if (socketID !== socketRef.current.id) {
+                    setCurrentTyper(username);
+                    setTimeout(() => setCurrentTyper(""), 2000);
+                }
+            });
+
+            socketRef.current?.on(ACTIONS.RAISE_HAND, ({ updatedClients }) => {
+                setClients(updatedClients);
             });
 
             // Listening for message
@@ -85,9 +92,7 @@ const EditorPage = () => {
                 currText += message;
                 chatWindow.innerHTML = currText;
                 chatWindow.scrollTop = chatWindow.scrollHeight;
-                if (getComputedStyle(chatDrawer).display === "none") {
-                    setUnreadMessages(true);
-                }
+                if (getComputedStyle(chatDrawer).display === "none") { setUnreadMessages(true) }
             });
         };
         init();
@@ -95,6 +100,8 @@ const EditorPage = () => {
             socketRef.current?.off(ACTIONS.JOINED);
             socketRef.current?.off(ACTIONS.DISCONNECTED);
             socketRef.current?.off(ACTIONS.SEND_MESSAGE);
+            socketRef.current?.off(ACTIONS.TYPING);
+            socketRef.current?.off(ACTIONS.RAISE_HAND);
             socketRef.current?.disconnect();
         };
     }, [location.state.username, roomID]);
@@ -103,9 +110,7 @@ const EditorPage = () => {
         try {
             await navigator.clipboard.writeText(roomID);
             toast.success("Room ID copied to clipboard");
-        } catch (error) {
-            toast.error("Failed to copy Room ID");
-        }
+        } catch (error) { toast.error("Failed to copy Room ID") }
     };
 
     const leaveRoom = () => {
@@ -113,10 +118,8 @@ const EditorPage = () => {
             title: "Leave Room",
             message:
                 <span>
-                    Are you sure you want to leave this meeting? To join again, use the same link.
-                    <br />
-                    However, please note that any ongoing chat will be missed.
-                    <br /><br />
+                    Are you sure you want to leave this meeting? To join again, use the same link.<br />
+                    However, please note that any ongoing chat will be missed.<br /><br />
                     Proceed?
                 </span>,
             cancelBtnText: "Cancel", submitBtnText: "Leave", type: "error", color: "white", bgcolor: `${colors["primary-bg"]}`,
@@ -128,26 +131,33 @@ const EditorPage = () => {
         window.open(`/whiteboard/${roomID}`, "_blank");
     };
 
-    const inputField = document.getElementById("inputValues");
-    const inputLabel = document.getElementById("inputLabel");
-    const outputLabel = document.getElementById("outputLabel");
+    const [handRaised, setHandRaised] = useState(false);
+    const raiseHand = () => {
+        socketRef.current?.emit(ACTIONS.RAISE_HAND, {
+            socketID: socketRef.current.id,
+            roomID,
+            clients,
+            handRaised: handRaised
+        });
+        setHandRaised(prevHandRaised => !prevHandRaised);
+    };
+
+    const editorConsole = document.getElementById("editor-console");
+    const inputLabel = document.getElementById("input-label");
+    const outputLabel = document.getElementById("output-label");
     const inputClicked = () => {
-        inputField.placeholder = "Enter your input here";
-        inputField.value = "";
-        inputField.disabled = false;
-        inputLabel.classList.remove("notClickedLabel");
-        inputLabel.classList.add("clickedLabel");
-        outputLabel.classList.remove("clickedLabel");
-        outputLabel.classList.add("notClickedLabel");
+        editorConsole.placeholder = "Enter your input here";
+        editorConsole.value = "";
+        editorConsole.disabled = false;
+        inputLabel.classList.add("clicked-label");
+        outputLabel.classList.remove("clicked-label");
     };
     const outputClicked = () => {
-        inputField.placeholder = "Your output will appear here. Click 'Run code' to see it";
-        inputField.value = "";
-        inputField.disabled = true;
-        inputLabel.classList.remove("clickedLabel");
-        inputLabel.classList.add("notClickedLabel");
-        outputLabel.classList.remove("notClickedLabel");
-        outputLabel.classList.add("clickedLabel");
+        editorConsole.placeholder = "Your output will appear here. Click 'Run code' to see it";
+        editorConsole.value = "";
+        editorConsole.disabled = true;
+        inputLabel.classList.remove("clicked-label");
+        outputLabel.classList.add("clicked-label");
     };
 
     const [languageIndex, setLanguageIndex] = useState(9);
@@ -155,7 +165,7 @@ const EditorPage = () => {
         setLanguageIndex(document.getElementById("languagesIndexOptions").value);
     };
     const runCode = async () => {
-        const input = inputField.value;
+        const input = editorConsole.value;
         const code = codeRef.current;
         if (!code || code.trim() === "") {
             toast.error("Write some code first");
@@ -171,19 +181,19 @@ const EditorPage = () => {
             });
             outputClicked();
             toast.dismiss();
-            inputField.value = message;
+            editorConsole.value = message;
             if (error) {
-                inputField.style.color = "red";
+                editorConsole.style.color = "red";
                 toast.error("Code compilation errors");
             } else {
-                inputField.style.color = "white";
+                editorConsole.style.color = "white";
                 toast.success("Code compilation complete");
             }
         } catch (error) {
             toast.dismiss();
             toast.error("Code compilation unsuccessful");
-            inputField.style.color = "red";
-            inputField.value = "Something went wrong, Please check your code and input.";
+            editorConsole.style.color = "red";
+            editorConsole.value = "Something went wrong, Please check your code and input.";
         }
     };
 
@@ -193,9 +203,16 @@ const EditorPage = () => {
     const handleEditorMenuOpen = (event) => { setEditorAnchorEl(event.currentTarget) };
     const handleEditorMenuClose = () => { setEditorAnchorEl(null) };
 
+    const [currentTyper, setCurrentTyper] = useState("");
+
     // JS for Chat Drawer 
     const [chatDrawerWidth, setChatDrawerWidth] = useState("27.5%");
-    const [openChat, setOpenChat] = useState(useMediaQuery("(min-width: 600px)"));
+    const [openChat, setOpenChat] = useState(useMediaQuery("(min-width: 800px)"));
+    const mobileScreen = useMediaQuery("(max-width: 800px)");
+    useEffect(() => {
+        if (mobileScreen) { setOpenChat(false) }
+    }, [mobileScreen])
+
     // JS for Unread Messages
     const [unreadMessages, setUnreadMessages] = useState(false);
     const handleChatDrawerOpen = (drawerWidth) => {
@@ -209,7 +226,7 @@ const EditorPage = () => {
     const chatInputField = useRef(null);
     const [chatMessage, setChatMessage] = useState("");
     const sendMessage = () => {
-        if (chatMessage.trim() === "") return;
+        if (chatMessage.trim() === "") { return }
         let message;
         if (anonymous) {
             message =
@@ -231,9 +248,7 @@ const EditorPage = () => {
         setChatMessage("");
     };
     const handleChatInput = (key) => {
-        if (key.keyCode === 13) {
-            sendMessage();
-        }
+        if (key.keyCode === 13) { sendMessage() }
     };
 
     // JS for Chat Settings Menu
@@ -267,16 +282,16 @@ const EditorPage = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row mb-[65px] select-none">
+        <div className="flex flex-col md:flex-row mb-[65px] md:mb-0 select-none">
             {/* Left side-panel */}
-            <div className="md:h-screen min-w-64 w-64 py-2 md:flex md:flex-col justify-between">
+            <div className="md:h-screen min-w-64 w-64 pt-2 md:pt-0 pb-2 md:flex md:flex-col justify-between">
                 <div className="w-screen md:w-auto flex justify-between md:block text-white">
                     <LogoWithTitle color={`${colors["primary-accent"]["500"]}`} styling="md:mt-3 md:mr-2 !justify-start md:!justify-center" />
                     <hr className="hidden md:block w-[87.5%] mx-auto mt-2 mb-1.5" />
                     <h3 className="hidden md:block text-center">Participants</h3>
                     <div className="hidden md:block px-2 py-1 max-h-[55vh] overflow-y-scroll">
-                        {clients.map((client) => (
-                            <Client key={client.socketId} me={location.state.username} username={client.username} userColor={client.userColor} />
+                        {clients.map((client, index) => (
+                            <Client key={index} me={location.state.username} username={client.username} userColor={client.userColor} handRaised={client.handRaised} />
                         ))}
                     </div>
                     <div className="mr-2 py-2 flex items-center md:hidden absolute right-0">
@@ -284,19 +299,23 @@ const EditorPage = () => {
                     </div>
                 </div>
                 <div className="hidden md:flex flex-col gap-2 items-center p-2">
-                    <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
+                    <SidebarButton buttonFunction={runCode} title="Run Code" logo={<PlayArrowRounded />} styling="hidden md:flex xl:hidden text-[#28c244] hover:text-white bg-secondary-bg hover:bg-[#389749]" />
+                    <SidebarButton buttonFunction={raiseHand} title="Raise Hand"
+                        logo={handRaised ? <BackHand sx={{ transform: "scaleX(-1)" }} /> : <BackHandOutlined sx={{ transform: "scaleX(-1)" }} />}
+                        styling={`hidden md:flex xl:hidden ${handRaised ? "text-[#ffc016]" : "text-gray-400"} bg-secondary-bg hover:bg-tertiary-bg`}
+                    />
                     <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" logo={
                         <lord-icon
                             src="https://cdn.lordicon.com/jdsvypqr.json" trigger="loop-on-hover" stroke="bold"
                             colors="primary:#9ca3af,secondary:#9ca3af " style={{ width: "20px", height: "20px" }}
                         />
-                    } styling="text-gray-400 bg-secondary-bg hover:bg-primary-bg" />
-                    <SidebarButton buttonFunction={toggleWhiteboard} title="Open Whiteboard" logo={<FilterFramesRounded />} styling="text-white bg-secondary-bg hover:bg-primary-bg" />
+                    } styling="hidden md:flex xl:hidden text-gray-400 bg-secondary-bg hover:bg-tertiary-bg" />
+                    <SidebarButton buttonFunction={toggleWhiteboard} title="Open Whiteboard" logo={<FilterFramesRounded />} styling="text-white bg-secondary-bg hover:bg-tertiary-bg" />
                     <SidebarButton buttonFunction={leaveRoom} title="Leave Room" logo={<ClearRounded />} styling="text-[#ff2d2d] hover:text-white bg-secondary-bg hover:bg-[#f54c4c]" />
                 </div>
             </div>
             {/* Editor panel */}
-            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} p-2 flex flex-col justify-between`}>
+            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} px-2 pb-2 flex flex-col justify-between`}>
                 <div className="flex justify-between items-center py-0.5">
                     <div className="relative border-b-2 w-48">
                         <select
@@ -307,6 +326,23 @@ const EditorPage = () => {
                                 <option key={index} value={index} className="text-sm text-white bg-secondary-bg">{label}</option>
                             ))}
                         </select>
+                    </div>
+                    <div className="hidden xl:flex gap-1 justify-center absolute left-1/2 -translate-x-1/2">
+                        <SidebarButton buttonFunction={runCode} title="Run" logo={<PlayArrowRounded />} styling="w-auto pl-1 pr-2 text-[#28c244] hover:text-white bg-card-bg hover:bg-[#389749]" />
+                        <SidebarButton buttonFunction={copyRoomID} title="Copy Room ID" logo={
+                            <lord-icon
+                                src="https://cdn.lordicon.com/jdsvypqr.json" trigger="loop-on-hover" stroke="bold"
+                                colors="primary:#9ca3af,secondary:#9ca3af " style={{ width: "20px", height: "20px" }}
+                            />
+                        } styling="w-auto px-2 text-gray-400 bg-card-bg hover:bg-board-bg" />
+                        <Tooltip title="Raise Hand">
+                            <span>
+                                <SidebarButton buttonFunction={raiseHand}
+                                    logo={handRaised ? <BackHand sx={{ transform: "scaleX(-1)" }} /> : <BackHandOutlined sx={{ transform: "scaleX(-1)" }} />}
+                                    styling={`w-auto px-2 ${handRaised ? "text-[#ffc016]" : "text-gray-400"}  bg-card-bg hover:bg-board-bg`}
+                                />
+                            </span>
+                        </Tooltip>
                     </div>
                     <div>
                         <CustomMenu
@@ -330,18 +366,20 @@ const EditorPage = () => {
                     languageIndex={languageIndex} fontSize={fontSize} tabSize={tabSize} indentUnit={indentSize}
                 />
                 <div className="h-[calc(45vh-245px)] md:h-[calc(30vh-52.5px)]">
-                    <div className="my-2 text-gray-300">
-                        <label id="inputLabel" onClick={inputClicked}
-                            className="clickedLabel py-1 px-2 mr-1 rounded-md cursor-pointer"
-                        >Input</label>
-                        |
-                        <label id="outputLabel" onClick={outputClicked}
-                            className="notClickedLabel py-1 px-2 ml-1 rounded-md cursor-pointer"
-                        >Output</label>
+                    <div className="mr-0.5 flex justify-between items-center">
+                        <div className="my-2 text-gray-300">
+                            <label id="input-label" onClick={inputClicked} className="clicked-label py-1 px-2 mr-1 rounded-md cursor-pointer">Input</label>
+                            |
+                            <label id="output-label" onClick={outputClicked} className="py-1 px-2 ml-1 rounded-md cursor-pointer">Output</label>
+                        </div>
+                        {currentTyper &&
+                            <p className="text-green-400 flex items-center">
+                                <span className="w-24 inline-block text-right truncate">{currentTyper}</span>&nbsp;is typing
+                            </p>
+                        }
                     </div>
                     <textarea
-                        id="inputValues" rows={6}
-                        placeholder="Enter your input here"
+                        id="editor-console" rows={6} placeholder="Enter your input here"
                         className="inputArea w-full h-[calc(100%-30px)] md:h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
                     ></textarea>
                 </div>
@@ -351,22 +389,19 @@ const EditorPage = () => {
                 {unreadMessages && <span className="w-2 h-2 mr-1 mt-1 rounded-full border-2 border-yellow-400 absolute right-0 z-20 bg-yellow-600" />}
                 <Tooltip title="Show Chat" className="cursor-pointer">
                     <lord-icon
-                        src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000"
-                        colors="primary:white,secondary:white"
+                        src="https://cdn.lordicon.com/wzrwaorf.json" trigger="loop" delay="1000" colors="primary:white,secondary:white"
                         style={{ width: "50px", height: "50px", margin: "0 2px 0 3px", cursor: "pointer", display: openChat && "none" }}
                         onClick={async () => { await handleChatDrawerOpen("27.5%"); chatInputField.current.focus(); }}
                     />
                 </Tooltip>
             </div>
             <Drawer
-                id="chat-drawer"
+                id="chat-drawer" open={openChat}
                 sx={{
-                    width: chatDrawerWidth, flexShrink: 0, height: "100vh",
-                    display: openChat ? "block" : "none",
+                    width: chatDrawerWidth, flexShrink: 0, display: openChat ? "block" : "none",
                     "& .MuiDrawer-paper": { width: chatDrawerWidth, bgcolor: `${colors["secondary-bg"]}` },
                 }}
                 anchor="right" variant="persistent"
-                open={openChat}
             >
                 <ChatSidebar
                     handleChatDrawerClose={handleChatDrawerClose} chatMessage={chatMessage} setChatMessage={setChatMessage} sendMessage={sendMessage}
@@ -383,8 +418,8 @@ const EditorPage = () => {
             </div>
             <div className="md:hidden">
                 <BottomNavigation
-                    leaveRoom={leaveRoom} toggleWhiteboard={toggleWhiteboard}
-                    handleChatDrawerOpen={handleChatDrawerOpen} unreadMessages={unreadMessages}
+                    leaveRoom={leaveRoom} handleChatDrawerOpen={handleChatDrawerOpen}
+                    handRaised={handRaised} raiseHand={raiseHand} toggleWhiteboard={toggleWhiteboard} unreadMessages={unreadMessages}
                 />
             </div>
         </div>

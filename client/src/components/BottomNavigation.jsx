@@ -1,8 +1,8 @@
-import { BackHandOutlined, CallEndOutlined, ChatOutlined, MoreHoriz } from "@mui/icons-material";
-// import { CallEndTwoTone, ChatTwoTone, FilterFramesRounded, MoreVert } from "@mui/icons-material";
+import { BackHand, BackHandOutlined, CallEndOutlined, ChatOutlined, FilterFramesRounded } from "@mui/icons-material";
+// import { CallEndTwoTone, ChatTwoTone, MoreHoriz, MoreVert } from "@mui/icons-material";
 import { SidebarButton } from "./Buttons";
 
-const BottomNavigation = ({ leaveRoom, toggleWhiteboard, handleChatDrawerOpen, unreadMessages }) => {
+const BottomNavigation = ({ leaveRoom, handleChatDrawerOpen, handRaised, raiseHand, toggleWhiteboard, unreadMessages }) => {
 
     return (
         <>
@@ -10,7 +10,6 @@ const BottomNavigation = ({ leaveRoom, toggleWhiteboard, handleChatDrawerOpen, u
                 <div className="w-[95%] flex justify-center">
                     <SidebarButton buttonFunction={leaveRoom} title="Leave" logo={<CallEndOutlined />} styling="w-[90%] mx-2 flex-col text-xs bg-[#ff2d2d] text-gray-200" />
                 </div>
-                {/* <SidebarButton buttonFunction={toggleWhiteboard} title="Whiteboard" logo={<FilterFramesRounded />} styling="flex-col text-xs text-gray-200" /> */}
                 <SidebarButton buttonFunction={() => handleChatDrawerOpen("100%")} title="Chat"
                     logo={
                         <div className="relative">
@@ -18,8 +17,12 @@ const BottomNavigation = ({ leaveRoom, toggleWhiteboard, handleChatDrawerOpen, u
                             {unreadMessages && <span className="w-2.5 h-2.5 -mt-0.5 -mr-0.5 rounded-full border-2 border-yellow-400 absolute right-0 bg-yellow-600" />}
                         </div>
                     } styling="flex-col text-xs text-gray-200" />
-                <SidebarButton buttonFunction={() => console.log("hey")} title="Raise Hand" logo={<BackHandOutlined />} styling="flex-col text-xs text-gray-200" />
-                <SidebarButton buttonFunction={() => console.log("hey")} title="More" logo={<MoreHoriz />} styling="flex-col text-xs text-gray-200" />
+                <SidebarButton buttonFunction={raiseHand} title="Raise Hand"
+                    logo={handRaised ? <BackHand sx={{ transform: "scaleX(-1)" }} /> : <BackHandOutlined sx={{ transform: "scaleX(-1)" }} />}
+                    styling={` ${handRaised ? "text-[#ffc016]" : "text-gray-400"} flex-col text-xs text-gray-200`}
+                />
+                <SidebarButton buttonFunction={toggleWhiteboard} title="Whiteboard" logo={<FilterFramesRounded />} styling="flex-col text-xs text-gray-200" />
+                {/* <SidebarButton buttonFunction={() => console.log("hey")} title="More" logo={<MoreHoriz />} styling="flex-col text-xs text-gray-200" /> */}
             </div>
             {/* 
             <div className="w-full fixed bottom-0 flex justify-center gap-6 px-2 py-3 text-white bg-primary-bg">

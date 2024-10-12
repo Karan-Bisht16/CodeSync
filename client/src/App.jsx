@@ -12,7 +12,7 @@ import { ConfirmationDialogContext } from "./contexts/ConfirmationDialog.context
 import ConfirmationDialog from "./components/ConfirmationDialog";
 
 const App = () => {
-    const { dialog, dialogValue, closeDialog, linearProgressBar, handleDialog } = useContext(ConfirmationDialogContext)
+    const { dialog, dialogValue, closeDialog, linearProgressBar, handleDialog } = useContext(ConfirmationDialogContext);
 
     return (
         <>

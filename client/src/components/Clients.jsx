@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Global } from "@emotion/react";
 import { Avatar, SwipeableDrawer, Tooltip } from "@mui/material";
+import { BackHand } from "@mui/icons-material";
 // importing components
 import Client from "./Client";
 
@@ -81,12 +82,15 @@ const Clients = ({ clients, me }) => {
                     </p>
                 </div>
                 <div className="h-full p-4 text-white bg-card-bg overflow-auto">
-                    {clients.map((client) => (
-                        <div key={client.socketId} className={`px-2 py-2 flex gap-2.5 items-center border-b-4 border-r-4 border-gray-700 rounded-lg mb-2 bg-primary-bg select-none`}>
+                    {clients.map((client, index) => (
+                        <div key={index} className={`px-2 py-2 flex gap-2.5 items-center border-b-4 border-r-4 border-gray-700 rounded-lg mb-2 bg-primary-bg select-none`}>
                             <Tooltip title={`${client.username} ${me === client.username ? "(me)" : ""}`}>
                                 <Avatar sx={avatarStyling(client)}>{client.username.charAt(0)}</Avatar>
                             </Tooltip>
                             <span className="overflow-hidden text-ellipsis">{client.username}</span>
+                            {client.handRaised &&
+                                <BackHand sx={{ position: "absolute", right: "32px", color: "#ffc016", transform: "scaleX(-1)" }} />
+                            }
                         </div>
                     ))}
                 </div>

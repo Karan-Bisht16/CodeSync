@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
 import toast from "react-hot-toast";
@@ -22,8 +22,8 @@ const Room = () => {
 
     const [loading, setLoading] = useState(false);
 
-    const createNewRoom = (e) => {
-        e.preventDefault();
+    const createNewRoom = (event) => {
+        event.preventDefault();
         const ID = uuidV4();
         setRoomID(ID);
         usernameField.current.focus();
@@ -89,7 +89,7 @@ const Room = () => {
                     <div className="flex flex-col gap-3 mt-8">
                         <LogoInput
                             type="text" placeholder="Enter room ID" value={roomID} inputRef={roomIDField}
-                            handleChangeFunction={(e) => setRoomID(e.target.value)} handleKeyUp={handleInputEnter}
+                            handleChangeFunction={(event) => setRoomID(event.target.value)} handleKeyUp={handleInputEnter}
                             styling="p-3" autoFocus={true} autoComplete="off"
                             logo={
                                 <lord-icon
@@ -101,7 +101,7 @@ const Room = () => {
                         />
                         <LogoInput
                             type="text" placeholder="Enter a username" value={username} inputRef={usernameField}
-                            handleChangeFunction={(e) => setUsername(e.target.value)} handleKeyUp={handleInputEnter}
+                            handleChangeFunction={(event) => setUsername(event.target.value)} handleKeyUp={handleInputEnter}
                             styling="p-3"
                             logo={
                                 <lord-icon

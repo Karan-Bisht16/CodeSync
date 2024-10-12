@@ -1,6 +1,6 @@
+import { useParams } from "react-router-dom";
 import { Tldraw } from "tldraw";
 import { useSyncDemo } from "@tldraw/sync";
-import { useParams } from "react-router-dom";
 
 const Whiteboard = () => {
     let { roomID } = useParams();

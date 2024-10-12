@@ -32,7 +32,7 @@ body {
     background: #1c1e29 !important;
 }
 
-.clickedLabel {
+.clicked-label {
     background: #64748b;
     color: white;
 }
