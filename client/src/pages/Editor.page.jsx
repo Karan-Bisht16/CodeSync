@@ -315,7 +315,7 @@ const EditorPage = () => {
                 </div>
             </div>
             {/* Editor panel */}
-            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} px-2 pb-2 flex flex-col justify-between`}>
+            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} px-2 flex flex-col justify-between`}>
                 <div className="flex justify-between items-center py-0.5">
                     <div className="relative border-b-2 w-48">
                         <select
