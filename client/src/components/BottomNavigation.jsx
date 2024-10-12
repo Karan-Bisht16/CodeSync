@@ -19,7 +19,7 @@ const BottomNavigation = ({ leaveRoom, handleChatDrawerOpen, handRaised, raiseHa
                     } styling="flex-col text-xs text-gray-200" />
                 <SidebarButton buttonFunction={raiseHand} title="Raise Hand"
                     logo={handRaised ? <BackHand sx={{ transform: "scaleX(-1)" }} /> : <BackHandOutlined sx={{ transform: "scaleX(-1)" }} />}
-                    styling={` ${handRaised ? "text-[#ffc016]" : "text-gray-400"} flex-col text-xs text-gray-200`}
+                    styling={` ${handRaised ? "text-[#ffc016]" : "text-gray-200"} flex-col text-xs`}
                 />
                 <SidebarButton buttonFunction={toggleWhiteboard} title="Whiteboard" logo={<FilterFramesRounded />} styling="flex-col text-xs text-gray-200" />
                 {/* <SidebarButton buttonFunction={() => console.log("hey")} title="More" logo={<MoreHoriz />} styling="flex-col text-xs text-gray-200" /> */}
