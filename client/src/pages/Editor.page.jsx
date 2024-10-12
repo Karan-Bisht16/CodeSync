@@ -365,7 +365,7 @@ const EditorPage = () => {
                     onCodeChange={(code) => { codeRef.current = code }}
                     languageIndex={languageIndex} fontSize={fontSize} tabSize={tabSize} indentUnit={indentSize}
                 />
-                <div className="h-[calc(45vh-245px)] md:h-[calc(30vh-52.5px)]">
+                <div className="min-h-[calc(45vh-245px)] md:h-[calc(30vh-52.5px)]">
                     <div className="mr-0.5 flex justify-between items-center">
                         <div className="my-2 text-gray-300">
                             <label id="input-label" onClick={inputClicked} className="clicked-label py-1 px-2 mr-1 rounded-md cursor-pointer">Input</label>
