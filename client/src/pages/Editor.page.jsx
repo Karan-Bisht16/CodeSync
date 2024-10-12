@@ -380,7 +380,7 @@ const EditorPage = () => {
                     </div>
                     <textarea
                         id="editor-console" rows={6} placeholder="Enter your input here"
-                        className="inputArea w-full h-[calc(100%-30px)] md:h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
+                        className="inputArea w-full min-h-[calc(100%-30px)] md:h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
                     ></textarea>
                 </div>
             </div>
