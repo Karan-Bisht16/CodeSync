@@ -315,7 +315,7 @@ const EditorPage = () => {
                 </div>
             </div>
             {/* Editor panel */}
-            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} px-2 flex flex-col justify-between`}>
+            <div className={`bg-slate-600 w-full ${openChat ? "md:max-w-[calc(72.5%-256px)]" : "md:max-w-[calc(100%-256px)]"} px-2 md:pb-2 flex flex-col justify-between`}>
                 <div className="flex justify-between items-center py-0.5">
                     <div className="relative border-b-2 w-48">
                         <select
@@ -365,7 +365,7 @@ const EditorPage = () => {
                     onCodeChange={(code) => { codeRef.current = code }}
                     languageIndex={languageIndex} fontSize={fontSize} tabSize={tabSize} indentUnit={indentSize}
                 />
-                <div className="min-h-[calc(45vh-245px)] md:h-[calc(30vh-52.5px)]">
+                <div className="min-h-[calc(45vh-245px)] md:min-h-[calc(30vh-52.5px)]">
                     <div className="mr-0.5 flex justify-between items-center">
                         <div className="my-2 text-gray-300">
                             <label id="input-label" onClick={inputClicked} className="clicked-label py-1 px-2 mr-1 rounded-md cursor-pointer">Input</label>
@@ -380,7 +380,7 @@ const EditorPage = () => {
                     </div>
                     <textarea
                         id="editor-console" rows={6} placeholder="Enter your input here"
-                        className="inputArea w-full min-h-[calc(100%-30px)] md:h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
+                        className="inputArea w-full min-h-[calc(100%-30px)] md:min-h-[calc(100%-40px)] px-2 py-1 text-sm text-white bg-board-bg resize-none outline-none select-all"
                     ></textarea>
                 </div>
             </div>

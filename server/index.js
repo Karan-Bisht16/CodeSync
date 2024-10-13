@@ -1,12 +1,12 @@
 const cors = require("cors");
 const http = require("http");
 const axios = require("axios");
-require("dotenv").config();
 const express = require("express");
-const app = express();
+require("dotenv").config();
 const { Server } = require("socket.io");
 const ACTIONS = require("./constants/Actions");
 
+const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5000;
 
@@ -15,6 +15,7 @@ app.use(cors({
     credentials: true,
     optionsSuccessStatus: 200,
 }));
+
 app.use(express.json());
 
 const io = new Server(server);
@@ -48,9 +49,15 @@ io.on("connection", (socket) => {
             });
         });
     });
-
-    socket.on(ACTIONS.CODE_CHANGE, ({ roomID, code }) => {
-        socket.in(roomID).emit(ACTIONS.CODE_CHANGE, { code });
+    socket.on(ACTIONS.CODE_CHANGE, ({ roomID, code, origin, removed, text, line, ch }) => {
+        socket.in(roomID).emit(ACTIONS.CODE_CHANGE, {
+            code,
+            origin,
+            removed,
+            text,
+            currentTyperLine: line,
+            currentTyperCh: ch,
+        });
     });
     socket.on(ACTIONS.CURSOR_MOVED, ({ socketID, roomID, username, userColor, line, ch }) => {
         socket.in(roomID).emit(ACTIONS.CURSOR_MOVED, { socketID, username, userColor, line, ch });

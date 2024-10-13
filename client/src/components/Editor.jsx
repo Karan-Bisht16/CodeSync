@@ -40,12 +40,13 @@ const Editor = ({ socketRef, roomID, username, userColor, onCodeChange, language
                 autofocus: true,
             });
             editorRef.current?.on("change", (instance, changes) => {
-                const { origin } = changes;
+                const { origin, removed, text } = changes;
                 const code = instance.getValue();
                 onCodeChange(code);
                 if (origin !== "setValue") {
+                    const { line, ch } = editorRef.current?.getCursor();
                     socketRef.current?.emit(ACTIONS.CODE_CHANGE, {
-                        roomID, code,
+                        roomID, code, origin, removed, text, line, ch
                     });
                 }
             });
@@ -84,9 +85,40 @@ const Editor = ({ socketRef, roomID, username, userColor, onCodeChange, language
     let clientsObjForBookmarks = {};
     useEffect(() => {
         if (socketRef?.current) {
-            socketRef.current?.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+            socketRef.current?.on(ACTIONS.CODE_CHANGE, ({ code, origin, removed, text, currentTyperLine, currentTyperCh }) => {
                 if (code != null) {
+                    const { line, ch } = editorRef.current?.getCursor();
+                    let newLine = line;
+                    let newCh = ch;
                     editorRef.current?.setValue(code);
+                    if (currentTyperLine === line) {
+                        if (currentTyperCh <= ch) {
+                            if (origin.includes("input")) {
+                                if (text.length === 2) {
+                                    newLine += 2 - removed.length;
+                                } else {
+                                    newCh = newCh + 1 - removed[0].length;
+                                }
+                            } else if (origin.includes("delete")) {
+                                newCh -= removed[0].length;
+                            } else if (origin.includes("paste")) {
+                                newCh = newCh + text[0].length - removed[0].length;
+                            }
+                        }
+                    } else if (currentTyperLine < line) {
+                        if (origin.includes("input")) {
+                            if (text.length === 2) {
+                                newLine += 2 - removed.length;
+                            }
+                        } else if (origin.includes("delete")) {
+                            if (removed.length > 1) {
+                                newLine -= removed.length - 1;
+                            }
+                        } else if (origin.includes("paste")) {
+                            newLine = newLine + text.length - removed.length;
+                        }
+                    }
+                    editorRef.current?.setCursor({ line: newLine, ch: newCh });
                 }
             });
             socketRef.current?.on(ACTIONS.CURSOR_MOVED, ({ socketID, username, userColor, line, ch, left }) => {
