@@ -291,11 +291,11 @@ const EditorPage = () => {
                     <h3 className="hidden md:block text-center">Participants</h3>
                     <div className="hidden md:block px-2 py-1 max-h-[55vh] overflow-y-scroll">
                         {clients.map((client, index) => (
-                            <Client key={index} me={location.state.username} username={client.username} userColor={client.userColor} handRaised={client.handRaised} />
+                            <Client key={index} socketID={socketRef.current?.id} client={client} />
                         ))}
                     </div>
                     <div className="mr-2 py-2 flex items-center md:hidden absolute right-0">
-                        <Clients clients={clients} me={location.state.username} />
+                        <Clients clients={clients} socketID={socketRef.current?.id} />
                     </div>
                 </div>
                 <div className="hidden md:flex flex-col gap-2 items-center p-2">

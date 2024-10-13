@@ -5,37 +5,37 @@ import { BackHand } from "@mui/icons-material";
 // importing components
 import Client from "./Client";
 
-const ClientsIcon = ({ clients, me }) => {
+const ClientsIcon = ({ clients, socketID }) => {
     const length = clients.length;
 
     if (length > 0) {
         switch (length) {
             case 1:
                 return (
-                    <Client me={clients[0].username} username={clients[0].username} userColor={clients[0].userColor} />
+                    <Client socketID={socketID} client={clients[0]} />
                 );
             case 2:
                 return (
                     <>
-                        <Client me={me} username={clients[0].username} userColor={clients[0].userColor} styling="relative left-8" />
-                        <Client me={me} username={clients[1].username} userColor={clients[1].userColor} />
+                        <Client socketID={socketID} client={clients[0]} styling="relative left-8" />
+                        <Client socketID={socketID} client={clients[1]} userColor={clients[1].userColor} />
                     </>
                 );
             case 3:
                 return (
                     <>
-                        <Client me={me} username={clients[0].username} userColor={clients[0].userColor} styling="relative left-16" />
-                        <Client me={me} username={clients[1].username} userColor={clients[1].userColor} styling="relative left-8" />
-                        <Client me={me} username={clients[2].username} userColor={clients[2].userColor} />
+                        <Client socketID={socketID} client={clients[0]} styling="relative left-16" />
+                        <Client socketID={socketID} client={clients[1]} userColor={clients[1].userColor} styling="relative left-8" />
+                        <Client socketID={socketID} client={clients[2]} userColor={clients[2].userColor} />
                     </>
                 );
             default:
                 return (
                     <>
-                        <Client me={me} username={clients[0].username} userColor={clients[0].userColor} styling="relative left-24" />
-                        <Client me={me} username={clients[1].username} userColor={clients[1].userColor} styling="relative left-16" />
-                        <Client me={me} username={clients[2].username} userColor={clients[2].userColor} styling="relative left-8" />
-                        <Client me={false} username="+" userColor="#d3d3d3" styling="relative left-0" />
+                        <Client socketID={socketID} client={clients[0]} styling="relative left-24" />
+                        <Client socketID={socketID} client={clients[1]} userColor={clients[1].userColor} styling="relative left-16" />
+                        <Client socketID={socketID} client={clients[2]} userColor={clients[2].userColor} styling="relative left-8" />
+                        <Client socketID={false} client={{ socketID: false, username: "+", userColor: "#d3d3d3" }} styling="relative left-0" />
                     </>
                 );
         }
@@ -43,15 +43,15 @@ const ClientsIcon = ({ clients, me }) => {
 }
 
 const drawerHeight = 60;
-const Clients = ({ clients, me }) => {
+const Clients = ({ clients, socketID }) => {
     const [openDrawer, setOpenDrawer] = useState(false);
     const toggleDrawer = (newOpen) => () => { setOpenDrawer(newOpen) };
 
     const avatarStyling = (client) => {
         return {
             width: "32px", height: "32px", bgcolor: client.userColor,
-            border: me === client.username ? "3px solid #00a951" : "1px solid gray",
-            boxShadow: me === client.username && "0 0 5px #00a951",
+            border: socketID === client.socketID ? "3px solid #00a951" : "1px solid gray",
+            boxShadow: socketID === client.socketID && "0 0 5px #00a951",
         };
     };
 
@@ -66,7 +66,7 @@ const Clients = ({ clients, me }) => {
                 }}
             />
             <div onClick={toggleDrawer(true)} className="flex">
-                <ClientsIcon clients={clients} me={me} />
+                <ClientsIcon clients={clients} socketID={socketID} />
             </div>
             <SwipeableDrawer
                 anchor="bottom" open={openDrawer}
@@ -84,7 +84,7 @@ const Clients = ({ clients, me }) => {
                 <div className="h-full p-4 text-white bg-card-bg overflow-auto">
                     {clients.map((client, index) => (
                         <div key={index} className={`px-2 py-2 flex gap-2.5 items-center border-b-4 border-r-4 border-gray-700 rounded-lg mb-2 bg-primary-bg select-none`}>
-                            <Tooltip title={`${client.username} ${me === client.username ? "(me)" : ""}`}>
+                            <Tooltip title={`${client.username} ${socketID === client.socketID ? "(me)" : ""}`}>
                                 <Avatar sx={avatarStyling(client)}>{client.username.charAt(0)}</Avatar>
                             </Tooltip>
                             <span className="overflow-hidden text-ellipsis">{client.username}</span>
