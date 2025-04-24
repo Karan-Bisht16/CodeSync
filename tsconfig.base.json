@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@codesync/shared": [
+                "packages/shared/src/index.js"
+            ]
+        },
+        "typeRoots": [
+            "./node_modules/@types"
+        ]
+    }
+}

@@ -26,10 +26,10 @@ objective of the Real-time Code Collaboration Platform is to create an interacti
 1. A basic prototype with a responsive and modern UI.
 2. Data modeling for rooms and users.
 3. Implemented Socket.IO for code synchronization and chat functionalities:
-<ul type="none">
+<ul type='none'>
     <li>
         3.1 A shared code editor (using codemirror) allowing users to write,edit, and view code collectively. Code editors features:
-        <ul type="none">
+        <ul type='none'>
             <li>
                 3.1.1 Real-time code synchronization
             </li>

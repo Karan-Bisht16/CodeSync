@@ -1,0 +1,15 @@
+export type PanelContextType = {
+    dynamicPanel: string | boolean,
+    openDynamicPanel(panel: string): void,
+    activeTerminalTab: number,
+    handleActiveTerminalTabChange(event: React.SyntheticEvent | null, newActiveTab: number): void,
+    terminalPanel: boolean,
+    openTerminalPanel(tab: number): void,
+    closeTerminalPanel(): void,
+    engagementPanel: string | boolean,
+    openEngagementPanel(panel: string): void,
+    closeEngagementPanel(): void,
+    hostControlsModal: boolean,
+    openHostControlsModal(): void,
+    closeHostControlsModal(): void,
+};

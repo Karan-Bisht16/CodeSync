@@ -1,0 +1,8 @@
+{
+    "watch": [
+        "src",
+        "../shared/dist"
+    ],
+    "ext": "ts,js",
+    "exec": "npm run build && npm run start"
+}
