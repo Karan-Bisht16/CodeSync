@@ -1,19 +1,26 @@
 import React from 'react';
-import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Checkbox,
+    Divider,
+    FormControlLabel,
+    Grid,
+    TextField,
+    Typography
+} from '@mui/material';
 // importing icons
 import {
     Google as GoogleIcon
 } from '@mui/icons-material';
+// importing contexts
+import { useAuthContext } from '../contexts/Auth.context';
 
-type SignUpProps = {
-    openLoginModal(): void,
-};
-
-export const SignUpModal: React.FC<SignUpProps> = (props) => {
-    const { openLoginModal } = props;
+export const Register: React.FC = () => {
+    const { openAuthModal } = useAuthContext();
 
     return (
-        <Box sx={{ height: '100%', width: '100%', color: 'text.primary', bgcolor: 'background.default', p: 4, mx: 'auto' }}>
+        <Box sx={{ height: '100%', width: '100%', color: 'text.primary', p: 4, mx: 'auto' }}>
             <Typography component='h1' variant='h4' gutterBottom>
                 Create Account
             </Typography>
@@ -119,7 +126,7 @@ export const SignUpModal: React.FC<SignUpProps> = (props) => {
                         variant='body2'
                         color='primary'
                         sx={{ cursor: 'pointer', fontWeight: 'medium' }}
-                        onClick={openLoginModal}
+                        onClick={() => openAuthModal('login')}
                     >
                         Log in
                     </Typography>

@@ -18,6 +18,7 @@ import {
 // importing icons
 import {
     FrontHand as HandRaisedIcon,
+    Info as InfoIcon,
     KeyboardArrowRight as DrawerCloseIcon,
     MoreVert as MoreVertIcon,
     PersonAddAlt1 as AssignRoleIcon,
@@ -30,17 +31,21 @@ import {
 import { constantsJSON } from '../../../data/constants.data';
 // importing types
 import type { Message, Role, SocketUser } from '@codesync/shared';
+// importing features
+import { useUserContext } from '../../user';
 // importing contexts
+import { useSocketContext } from '../../../contexts/Socket.context';
+import { usePanelContext } from '../../../contexts/Panel.context';
+import { useMobileContext } from '../../../contexts/Mobile.context';
+// importing hooks
+import { useNoScroll } from '../../../hooks/useNoScroll';
 // importing components
 import { ToolTip } from '../../../components/ToolTip';
 import { UserAvatars } from '../../../components/UserAvatars';
 // importing utils
 import { hasPermission } from '@codesync/shared';
 import { formattedString } from '../../../utils/helpers.util';
-import { useUserContext } from '../../user';
-import { useSocketContext } from '../../../contexts/Socket.context';
-import { usePanelContext } from '../../../contexts/Panel.context';
-import { useMobileContext } from '../../../contexts/Mobile.context';
+import { RolesPermissionsModal } from './RolesPermissionModal';
 
 type MessageItemProps = {
     message: Message,
@@ -281,6 +286,8 @@ export const EngagementPanel: React.FC = () => {
     const { messages, sendMessage, participants } = useSocketContext();
     const { user } = useUserContext();
 
+    useNoScroll(isMobile);
+
     const [message, setMessage] = useState<string>('');
     const [sendingMessage, setSendingMessage] = useState<boolean>(false);
 
@@ -288,6 +295,7 @@ export const EngagementPanel: React.FC = () => {
 
     const isSameSenderAsPrevious = (index: number): boolean => {
         if (index === 0) return false;
+        if (messages[index - 1].isAnnouncement) return false;
         return _.isEqual(messages[index - 1].sender, messages[index].sender);
     };
 
@@ -311,6 +319,14 @@ export const EngagementPanel: React.FC = () => {
         }
     };
 
+    const [rolesPermissionModal, setRolesPermissionModal] = useState(false);
+
+    const openRolesPermissionModal = () => {
+        setRolesPermissionModal(true);
+    };
+    const closeRolesPermissionModal = () => {
+        setRolesPermissionModal(false);
+    }
     const [participantSearchTerm, setParticipantSearchTerm] = useState<string>('')
 
     useEffect(() => {
@@ -352,9 +368,11 @@ export const EngagementPanel: React.FC = () => {
                             <Typography variant='subtitle1' fontWeight='bold'>
                                 Chat
                             </Typography>
-                            <IconButton size='small' onClick={closeEngagementPanel}>
-                                <DrawerCloseIcon fontSize='small' />
-                            </IconButton>
+                            <ToolTip title='Close'>
+                                <IconButton size='small' onClick={closeEngagementPanel}>
+                                    <DrawerCloseIcon fontSize='small' />
+                                </IconButton>
+                            </ToolTip>
                         </Box>
                         <Box sx={{ flexGrow: 1, p: 2, overflowY: 'auto' }}>
                             <Box sx={{ px: 2, py: 1, mb: 2, bgcolor: 'action.hover', borderRadius: 4 }}>
@@ -418,12 +436,21 @@ export const EngagementPanel: React.FC = () => {
                                 borderColor: 'divider',
                             }}
                         >
-                            <Typography variant='subtitle1' fontWeight='bold'>
-                                Participants ({participants.length})
-                            </Typography>
-                            <IconButton size='small' onClick={closeEngagementPanel}>
-                                <DrawerCloseIcon fontSize='small' />
-                            </IconButton>
+                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                                <Typography variant='subtitle1' fontWeight='bold'>
+                                    Participants ({participants.length})
+                                </Typography>
+                                <ToolTip title='Learn more about participants types and roles'>
+                                    <IconButton size='small' onClick={openRolesPermissionModal}>
+                                        <InfoIcon fontSize='small' />
+                                    </IconButton>
+                                </ToolTip>
+                            </Box>
+                            <ToolTip title='Close'>
+                                <IconButton size='small' onClick={closeEngagementPanel}>
+                                    <DrawerCloseIcon fontSize='small' />
+                                </IconButton>
+                            </ToolTip>
                         </Box>
                         <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
                             <TextField
@@ -523,6 +550,7 @@ export const EngagementPanel: React.FC = () => {
                         </Box>
                     </>
                 )}
+                <RolesPermissionsModal open={rolesPermissionModal} onClose={closeRolesPermissionModal} />
             </Box>
         </Drawer>
     );

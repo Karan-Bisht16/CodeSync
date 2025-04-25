@@ -29,8 +29,8 @@ export const AnimatedCodeEditor: React.FC = () => {
     }, [palette, theme])
 
     const [typedStates, setTypedStates] = useState({
-        alice: 0,
-        bob: 0,
+        caret1: 0,
+        caret2: 0,
     });
 
     const typedRef = useRef(typedStates);
@@ -44,6 +44,17 @@ export const AnimatedCodeEditor: React.FC = () => {
         }));
     }, [typedStates, carets]);
 
+    const renderedCode = useMemo(() => {
+        let code = baseDisplayCode;
+        carets.forEach(user => {
+            const insertText = user.content.slice(0, typedStates[user.id as keyof typeof typedStates] || 0);
+            const before = code.slice(0, user.basePosition);
+            const after = code.slice(user.basePosition);
+            code = before + insertText + after;
+        });
+        return code;
+    }, [typedStates]);
+
     useEffect(() => {
         typedRef.current = typedStates;
     }, [typedStates]);
@@ -55,10 +66,14 @@ export const AnimatedCodeEditor: React.FC = () => {
             const speed = 60000 / user.speed;
 
             const interval = setInterval(() => {
-                setTypedStates(prev => ({
-                    ...prev,
-                    [id]: Math.min(prev[id as keyof typeof typedStates] + 1, user.content.length),
-                }));
+                setTypedStates(prev => {
+                    const current = prev[id as keyof typeof prev] || 0;
+                    if (current >= user.content.length) return prev;
+                    return {
+                        ...prev,
+                        [id]: current + 1,
+                    };
+                });
 
                 const view = editorViewRef.current;
                 if (!view) return;
@@ -125,23 +140,12 @@ export const AnimatedCodeEditor: React.FC = () => {
         }
     }, []);
 
-    const renderedCode = useMemo(() => {
-        let code = baseDisplayCode;
-        carets.forEach(user => {
-            const insertText = user.content.slice(0, typedStates[user.id as keyof typeof typedStates] || 0);
-            const before = code.slice(0, user.basePosition);
-            const after = code.slice(user.basePosition);
-            code = before + insertText + after;
-        });
-        return code;
-    }, [typedStates]);
-
     return (
         <Grid size={{ xs: 12, md: 6 }}>
             <Box
                 sx={{
                     position: 'relative',
-                    height: '400px',
+                    height: { xs: '400px', sm: '440px' },
                     borderRadius: '12px',
                     overflow: 'hidden',
                     boxShadow: '0 20px 80px rgba(0,0,0,0.3)',
@@ -183,7 +187,7 @@ export const AnimatedCodeEditor: React.FC = () => {
                                 highlightActiveLineGutter: false,
                                 highlightActiveLine: false,
                             }}
-                            className='!h-full !text-[12px] sm:!text-[14px] !cursor-default !select-none'
+                            className='!h-full !overflow-hidden !text-[12px] sm:!text-[14px] !cursor-default !pointer-events-none !select-none'
                             editable={false}
                             onCreateEditor={(view) => {
                                 editorViewRef.current = view;

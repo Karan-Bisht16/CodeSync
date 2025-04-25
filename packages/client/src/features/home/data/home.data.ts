@@ -65,5 +65,5 @@ export const homeJSON = {
         ]
     },
     displayCodeFileTitle: 'index.tsx - CodeSync',
-    baseDisplayCode: `import React, { useState, useEffect, useCallback } from 'react';\nimport { fetchData, transformData } from '../utils/dataHelpers';\n\nconst DemoList = ({ initialPage, apiUrl }) => {`
+    baseDisplayCode: ``
 };

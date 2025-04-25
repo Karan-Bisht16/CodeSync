@@ -9,6 +9,7 @@ import type { ReactNode } from 'react';
 // importing features
 import { useUserContext } from '../../user';
 // importing contexts
+import { useAuthContext } from '../../../contexts/Auth.context';
 import { usePanelContext } from '../../../contexts/Panel.context';
 
 type DynamicPanelContainerProps = {
@@ -46,6 +47,7 @@ const DynamicPanelContainer: React.FC<DynamicPanelContainerProps> = (props) => {
 export const DynamicPanel: React.FC = () => {
     const { dynamicPanel } = usePanelContext();
     const { isLoggedIn } = useUserContext();
+    const { openAuthModal } = useAuthContext();
 
     if (!isLoggedIn) {
         return (
@@ -84,6 +86,7 @@ export const DynamicPanel: React.FC = () => {
                         variant='contained'
                         color='primary'
                         startIcon={<LoginOutlined />}
+                        onClick={() => openAuthModal('login')}
                         sx={{ borderRadius: 2 }}
                     >
                         Log In

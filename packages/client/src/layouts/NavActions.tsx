@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import {
     Box,
     Button,
@@ -11,19 +12,21 @@ import {
 // importing features
 import { Settings, useSettingsContext } from '../features/settings';
 import { useUserContext } from '../features/user';
+// importing contexts
+import { useAuthContext } from '../contexts/Auth.context';
+import { useMobileContext } from '../contexts/Mobile.context';
 // importing components
 import { ToolTip } from '../components/ToolTip';
-import { useMobileContext } from '../contexts/Mobile.context';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { AuthModal } from '../components/AuthModal';
 
 export const NavActions: React.FC = () => {
+    const { openAuthModal } = useAuthContext();
     const { isMobile } = useMobileContext();
-    const { settingsModal, openSettingsModal, closeSettingsModal } = useSettingsContext();
+    const { openSettingsModal } = useSettingsContext();
     const { isLoggedIn } = useUserContext();
 
     const location = useLocation();
 
-    const navigate = useNavigate();
 
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1.5, sm: 2 } }}>
@@ -31,7 +34,7 @@ export const NavActions: React.FC = () => {
                 <>
                     <Button
                         size='small'
-                        onClick={() => navigate('/auth')}
+                        onClick={() => openAuthModal('login')}
                         sx={{
                             color: 'text.primary',
                             px: '16px',
@@ -46,21 +49,22 @@ export const NavActions: React.FC = () => {
                         size='small'
                         variant='contained'
                         color='primary'
-                        onClick={() => navigate('/auth')}
+                        onClick={() => openAuthModal('register')}
                         sx={{ borderRadius: '4px' }}
                     >
-                        Sign Up
+                        Register
                     </Button>
                 </>
             }
 
             <ToolTip title='Settings (Ctrl + ,)'>
-                <IconButton onClick={openSettingsModal}>
-                    <SettingsIcon />
+                <IconButton size='small' onClick={openSettingsModal}>
+                    <SettingsIcon fontSize='small' />
                 </IconButton>
             </ToolTip>
 
-            <Settings open={settingsModal} onClose={closeSettingsModal} />
+            <Settings />
+            <AuthModal />
         </Box>
     );
 };

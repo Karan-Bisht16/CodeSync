@@ -37,6 +37,7 @@ import { useSettingsContext } from '../features/settings';
 import { TerminalPanel } from '../features/terminalPanel';
 import { useUserContext } from '../features/user';
 // importing contexts
+import { useAuthContext } from '../contexts/Auth.context';
 import { useColorContext } from '../contexts/Color.context';
 import { useMobileContext } from '../contexts/Mobile.context';
 import { useModalContext } from '../contexts/Modal.context';
@@ -58,6 +59,7 @@ import { linkTo } from '../utils/helpers.util';
 export const Editor: React.FC = () => {
     const { activityDockWidth, dynamicPanelWidth, navbarHeight, terminalPanelHeight, languages } = constantsJSON;
 
+    const { openAuthModal } = useAuthContext();
     const { palette, theme } = useColorContext();
     const { editor, handleEditorLanguageChange, handleEditorOutputChange } = useEditorContext();
     const { isMobile } = useMobileContext();
@@ -80,7 +82,7 @@ export const Editor: React.FC = () => {
         sendMessage,
         getExecutedCode
     } = useSocketContext();
-    const { user, isValidUser, userFetchedFromLocalStorage } = useUserContext();
+    const { user, isLoggedIn, isValidUser, userFetchedFromLocalStorage } = useUserContext();
 
     const { roomID } = useParams<string>();
 
@@ -105,6 +107,12 @@ export const Editor: React.FC = () => {
                 status: 'success',
                 message: 'Room ID copied to clipboard'
             });
+        }
+    };
+
+    const saveRoom = () => {
+        if (!isLoggedIn) {
+            openAuthModal('login');
         }
     };
 
@@ -280,6 +288,7 @@ export const Editor: React.FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <ToolTip title='Run Code (Ctrl + Enter)'>
                             <Button
+                                size='small'
                                 variant='contained'
                                 color='primary'
                                 startIcon={<RunCodeIcon />}
@@ -291,11 +300,10 @@ export const Editor: React.FC = () => {
                             </Button>
                         </ToolTip>
 
-                        {/* TODO: open login modal */}
                         {!isMobile &&
                             <ToolTip title='Save Room (Ctrl + S)'>
-                                <IconButton color='inherit'>
-                                    <SaveIcon />
+                                <IconButton size='small' color='inherit' onClick={saveRoom}>
+                                    <SaveIcon fontSize='small' />
                                 </IconButton>
                             </ToolTip>
                         }

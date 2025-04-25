@@ -4,6 +4,7 @@ import { RoomProvider } from './features/room';
 import { SettingsProvider } from './features/settings';
 import { UserProvider } from './features/user';
 // importing providers
+import { AuthProvider } from './contexts/Auth.context';
 import { ColorProvider } from './contexts/Color.context';
 import { MobileProvider } from './contexts/Mobile.context';
 import { ModalProvider } from './contexts/Modal.context';
@@ -19,11 +20,13 @@ createRoot(document.getElementById('root')!).render(
             <MobileProvider>
                 <ModalProvider>
                     <SnackBarProvider>
-                        <UserProvider>
-                            <RoomProvider>
-                                <App />
-                            </RoomProvider>
-                        </UserProvider>
+                        <AuthProvider>
+                            <UserProvider>
+                                <RoomProvider>
+                                    <App />
+                                </RoomProvider>
+                            </UserProvider>
+                        </AuthProvider>
                     </SnackBarProvider>
                 </ModalProvider>
             </MobileProvider>

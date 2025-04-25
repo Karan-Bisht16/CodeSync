@@ -15,7 +15,6 @@ import { SocketProvider } from './contexts/Socket.context';
 import { useModalContext } from './contexts/Modal.context';
 import { useSnackBarContext } from './contexts/SnackBar.context';
 // importing pages
-import { Auth } from './pages/Auth.page';
 import { Editor } from './pages/Editor.page';
 import { Home } from './pages/Home.page';
 import { Room } from './pages/Room.page';
@@ -57,7 +56,6 @@ const App: React.FC = () => {
                     }
                 />
                 <Route path='/whiteboard/:roomID' element={<Whiteboard />} />
-                <Route path='/auth' element={<Auth />} />
                 <Route path='*' element={<Navigate to='/' />} />
             </Routes>
             <Footer />

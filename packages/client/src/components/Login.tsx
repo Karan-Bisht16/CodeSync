@@ -7,22 +7,21 @@ import {
     Divider,
     IconButton,
 } from '@mui/material';
+// importing icons
 import {
     Apple as AppleIcon,
     Facebook as FacebookIcon,
     Google as GoogleIcon,
     Twitter as TwitterIcon,
 } from '@mui/icons-material';
+// importing contexts
+import { useAuthContext } from '../contexts/Auth.context';
 
-type LoginPageProps = {
-    openSignUpModal(): void
-};
-
-export const LoginModal: React.FC<LoginPageProps> = (props) => {
-    const { openSignUpModal } = props;
+export const Login: React.FC = () => {
+    const { openAuthModal } = useAuthContext();
 
     return (
-        <Box sx={{ height: '100%', width: '100%', color: 'text.primary', bgcolor: 'background.default', p: 4, mx: 'auto' }}>
+        <Box sx={{ height: '100%', width: '100%', color: 'text.primary', p: 4, mx: 'auto' }}>
             <Typography component='h1' variant='h4' gutterBottom>
                 Login
             </Typography>
@@ -72,7 +71,7 @@ export const LoginModal: React.FC<LoginPageProps> = (props) => {
                         variant='body2'
                         color='primary'
                         sx={{ cursor: 'pointer', fontWeight: 'medium' }}
-                        onClick={openSignUpModal}
+                        onClick={() => openAuthModal('register')}
                     >
                         Create account
                     </Typography>

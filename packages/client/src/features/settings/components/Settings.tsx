@@ -33,17 +33,12 @@ import { KeyBindingSettings } from './KeyBindingSettings';
 import { NotificationSettings } from './NotificationSettings';
 import { UserSettings } from './UserSettings';
 
-type SettingsProps = {
-    open: boolean,
-    onClose: () => void,
-};
-
-export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
+export const Settings: React.FC = () => {
     const { settingsSidebarWidth } = constantsJSON;
 
     const { isMobile } = useMobileContext();
     const { openModal } = useModalContext();
-    const { resetSettings } = useSettingsContext();
+    const { settingsModal, resetSettings, closeSettingsModal } = useSettingsContext();
     const { sections, activeSection, handleSectionChange } = useSettingsSections();
 
     const location = useLocation();
@@ -76,7 +71,7 @@ export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
         });
     };
 
-    if (!open) {
+    if (!settingsModal) {
         return null;
     }
 
@@ -106,7 +101,7 @@ export const Settings: React.FC<SettingsProps> = ({ open, onClose }) => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant='h5'>Settings</Typography>
                     </Box>
-                    <IconButton aria-label='close' color='inherit' edge='end' onClick={onClose}>
+                    <IconButton aria-label='close' color='inherit' edge='end' onClick={closeSettingsModal}>
                         <CloseIcon />
                     </IconButton>
 

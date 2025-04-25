@@ -58,7 +58,12 @@ export const SettingsProvider: React.FC<ContextChildrenProps> = ({ children }) =
 
     const updateTheme = (theme: Theme) => {
         setSettings((prevSettings) => {
-            return { ...prevSettings, theme: theme };
+            const updatedSettings = {
+                ...prevSettings,
+                "theme": theme,
+            };
+            localStorage.setItem('codesync-settings', JSON.stringify(updatedSettings));
+            return updatedSettings;
         });
     };
 

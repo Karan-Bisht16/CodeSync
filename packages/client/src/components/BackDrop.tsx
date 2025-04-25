@@ -2,6 +2,8 @@ import React from 'react';
 import { Box } from '@mui/material';
 // imorting types
 import type { ReactNode } from 'react';
+// imorting hooks
+import { useNoScroll } from '../hooks/useNoScroll';
 
 type BackDropProps = {
     children: ReactNode,
@@ -9,6 +11,7 @@ type BackDropProps = {
 
 export const BackDrop: React.FC<BackDropProps> = (props) => {
     const { children } = props;
+    useNoScroll();
 
     return (
         <Box
