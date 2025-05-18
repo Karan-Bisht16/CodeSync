@@ -1,15 +1,15 @@
 import React, { createContext, useCallback, useContext, useRef, useState } from 'react';
-// importing data
-import { constantsJSON } from '../../../data/constants.data';
 // importing contexts
 import { SettingsContext } from '../../settings/contexts/Settings.context';
 // importing types
 import type { SelectChangeEvent } from '@mui/material';
-import type { Editor, EditorLanguage } from '@codesync/shared';
 import type { ReactCodeMirrorRef, StateEffect } from '@uiw/react-codemirror';
+import type { Editor, EditorLanguage } from '@codesync/shared';
 import type { ContextChildrenProps } from '../../../types/Context.types';
 import type { SetEditorDispatchArgs } from '../../../types/Socket.types';
 import type { EditorContextType, EditorOutput, EditorOutputStatus } from '../types';
+// importing utils
+import { editorLanguages } from '@codesync/shared';
 
 const EditorContext = createContext<EditorContextType>({
     editorRef: { current: null },
@@ -24,15 +24,13 @@ const EditorContext = createContext<EditorContextType>({
 });
 export const useEditorContext = () => useContext(EditorContext);
 export const EditorProvider: React.FC<ContextChildrenProps> = ({ children }) => {
-    const { languages } = constantsJSON;
 
     const { settings } = useContext(SettingsContext);
 
     // if and when multi file system is implemented then by default 
     // their will be no editor and user will open files and that will set editors
     const [editor, setEditor] = useState<Editor>({
-        language: languages.find((language) => language.value === settings.editorDefaultLanguage) as EditorLanguage,
-        editPolicy: 'host-only',
+        language: editorLanguages.find((language) => language.value === settings.editorDefaultLanguage) as EditorLanguage,
     });
 
     const editorRef = useRef<ReactCodeMirrorRef>(null);
@@ -45,7 +43,7 @@ export const EditorProvider: React.FC<ContextChildrenProps> = ({ children }) => 
     const handleEditorLanguageChange = (event: SelectChangeEvent) => {
         const { value } = event.target;
 
-        const language = languages.find((language) => language.value === value);
+        const language = editorLanguages.find((language) => language.value === value);
         if (!language) return;
 
         setEditor((prevEditor) => {

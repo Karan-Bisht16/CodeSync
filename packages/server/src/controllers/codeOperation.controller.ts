@@ -14,7 +14,6 @@ import { apiResponse } from '../utils/apiResponse.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
 const executeCode = asyncHandler(async (req: Request, res: Response) => {
-    console.log(req.body);
     const { languageChoice, program, input } = req.body;
 
     const encodedParams = new URLSearchParams();

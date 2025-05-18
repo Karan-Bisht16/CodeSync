@@ -147,7 +147,17 @@ const getDesignTokens = (theme: Theme): ThemeOptions => ({
         button: {
             textTransform: 'none'
         }
-    }
+    },
+    zIndex: {
+        mobileStepper: 100,
+        fab: 105,
+        speedDial: 105,
+        appBar: 110,
+        drawer: 120,
+        modal: 210,
+        snackbar: 140,
+        tooltip: 150,
+    },
 });
 
 const ColorContext = createContext<ColorContextType>({

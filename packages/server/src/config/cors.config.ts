@@ -5,9 +5,9 @@ const whitelist = process.env.ALLOWED_ORIGINS?.split(',').map((url) => url.trim(
 export const corsOptions = {
     origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
         if (!origin || whitelist.includes(origin)) {
-            callback(null, true)
+            callback(null, true);
         } else {
-            callback(new Error('Not allowed by CORS'))
+            callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,

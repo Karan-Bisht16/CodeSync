@@ -45,7 +45,7 @@ export const JoinRequestNotifications: React.FC = () => {
     if (joinRequestQueue.length === 0) return null;
 
     return (
-        <Box sx={{ position: 'fixed', top: 80, right: 20, zIndex: 1000, pointerEvents: 'none' }}>
+        <Box sx={{ position: 'fixed', top: 80, right: 20, zIndex: 200, pointerEvents: 'none' }}>
             <Slide timeout={transitionDuration} direction='left' in={true} mountOnEnter unmountOnExit>
                 <Paper
                     elevation={3}

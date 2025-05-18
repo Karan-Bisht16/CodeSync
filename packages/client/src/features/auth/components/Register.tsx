@@ -1,0 +1,165 @@
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import {
+    Box,
+    Button,
+    Divider,
+    TextField,
+    Typography
+} from '@mui/material';
+// importing data
+import { constantsJSON } from '../../../data/constants.data';
+// importing contexts
+import { useAuthContext } from '../contexts/Auth.context';
+import { useSnackBarContext } from '../../../contexts/SnackBar.context';
+import { AuthProviders } from './AuthProviders';
+
+export const Register: React.FC = () => {
+    const { emailRegex } = constantsJSON;
+
+    const { openAuthModal, registerViaEmail } = useAuthContext();
+    const { openSnackBar } = useSnackBarContext();
+
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
+
+    const usernameFieldRef = useRef<HTMLInputElement>(null);
+    const emailFieldRef = useRef<HTMLInputElement>(null);
+    const passwordFieldRef = useRef<HTMLInputElement>(null);
+
+    const handleFormDataChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+
+        setFormData((prevFormData) => {
+            return { ...prevFormData, [name]: value };
+        });
+    };
+
+    const isFormDataValid = () => {
+        if (formData.username.trim().length === 0) {
+            usernameFieldRef.current?.focus();
+            openSnackBar({ status: 'error', message: 'Enter username' });
+            return false;
+        }
+        if (formData.email.trim().length === 0) {
+            emailFieldRef.current?.focus();
+            openSnackBar({ status: 'error', message: 'Enter email' });
+            return false;
+        }
+        if (!emailRegex.test(formData.email)) {
+            emailFieldRef.current?.focus();
+            openSnackBar({ status: 'error', message: 'Provide a valid email' });
+            return false;
+        }
+        if (formData.password.trim().length === 0) {
+            passwordFieldRef.current?.focus();
+            openSnackBar({ status: 'error', message: 'Enter password' });
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (!isFormDataValid()) {
+            return;
+        }
+
+        registerViaEmail(formData);
+    };
+
+    return (
+        <Box
+            component='form'
+            sx={{ height: '100%', width: '100%', color: 'text.primary', p: 4, mx: 'auto' }}
+            onSubmit={handleRegister}
+        >
+            <Typography component='h1' variant='h4' gutterBottom>
+                Create Account
+            </Typography>
+
+            <TextField
+                id='username'
+                label='User name *'
+                name='username'
+                autoComplete='off'
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={formData.username}
+                onChange={handleFormDataChange}
+                inputRef={usernameFieldRef}
+            />
+
+            <TextField
+                id='email'
+                label='Email *'
+                name='email'
+                autoComplete='off'
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={formData.email}
+                onChange={handleFormDataChange}
+                inputRef={emailFieldRef}
+            />
+
+            <TextField
+                id='password'
+                label='Password *'
+                name='password'
+                type='password'
+                autoComplete='off'
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={formData.password}
+                onChange={handleFormDataChange}
+                inputRef={passwordFieldRef}
+            />
+
+            <Button
+                type='submit'
+                variant='contained'
+                fullWidth
+                sx={{
+                    py: 1.5,
+                    mt: 2,
+                    mb: 3,
+                    bgcolor: 'primary.main',
+                    '&:hover': { bgcolor: 'primary.dark' },
+                }}
+            >
+                Create Account
+            </Button>
+
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+                <Typography variant='body2' color='text.secondary'>
+                    Already have an account?{' '}
+                    <Typography
+                        component='span'
+                        variant='body2'
+                        color='primary'
+                        sx={{ cursor: 'pointer', fontWeight: 'medium' }}
+                        onClick={() => openAuthModal('login')}
+                    >
+                        Log in
+                    </Typography>
+                </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Divider sx={{ flexGrow: 1 }} />
+                <Typography variant='body2' color='text.secondary' sx={{ px: 2 }}>
+                    OR
+                </Typography>
+                <Divider sx={{ flexGrow: 1 }} />
+            </Box>
+
+            <AuthProviders />
+        </Box>
+    );
+};

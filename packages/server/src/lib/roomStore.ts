@@ -136,7 +136,6 @@ export class RoomStore {
         const room = this.rooms.get(roomID);
         if (!room) return;
 
-        // NEW
         const user = room.users.get(socketID);
         if (user) {
             if (!this.previousRoles.has(roomID)) {
@@ -150,7 +149,6 @@ export class RoomStore {
 
         if (room.users.size === 0) {
             this.rooms.delete(roomID);
-            // NEW
             this.previousRoles.delete(roomID);
         }
     };

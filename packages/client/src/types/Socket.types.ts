@@ -2,7 +2,7 @@ import type { Socket } from 'socket.io-client';
 import type { StateEffect } from '@uiw/react-codemirror';
 import type { Message, Role, Room, SocketUser } from '@codesync/shared';
 import type { ApiResponse } from './API.types';
-import type { RemotePeerState } from '../utils/remoteCaret.utils';
+import type { RemotePeerState } from '../features/editor';
 
 export type SessionInitializedEvent = {
     initializedUser: SocketUser,

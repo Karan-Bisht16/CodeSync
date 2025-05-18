@@ -28,11 +28,12 @@ import { useEditorContext } from '../contexts/Editor.context';
 // importing components
 import { BackDrop } from '../../../components/BackDrop';
 import { LoadingModal } from '../../../components/LoadingModal';
+import { ToolTip } from '../../../components/ToolTip';
 import { SearchWidgetConstructor } from './SearchWidget';
 // importing utils
-import { peerExtension } from '../../../utils/collab.utils';
-import { remoteCaretExtension, setRemotePeersEffect } from '../../../utils/remoteCaret.utils';
-import { ToolTip } from '../../../components/ToolTip';
+import { peerExtension } from '../utils/collab.utils';
+import { remoteCaretExtension, setRemotePeersEffect } from '../utils/remoteCaret.utils';
+import { hasPermission } from '@codesync/shared';
 
 type EditorComponentProps = {
     roomID: string,
@@ -244,7 +245,7 @@ export const EditorComponent: React.FC<EditorComponentProps> = (props) => {
                             extensions={editorExtensions}
                             theme={allEditorThemes[editorTheme(settings.editorTheme)] as Extension | undefined}
                             onUpdate={handleCaretUpdate}
-                        // TODO: editable={hasPermission(user, 'editors', 'edit', editor)}
+                            editable={hasPermission(user, 'rooms', 'edit', room)}
                         />
                     )}
                 </Box>

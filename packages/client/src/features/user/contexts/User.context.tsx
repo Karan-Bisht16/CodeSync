@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 // importing types
 import type { User } from '@codesync/shared';
 import type { ContextChildrenProps } from '../../../types/Context.types';
-import type { UserContextType } from '../types';
+import type { LogUserInArgs, UserContextType } from '../types';
 
 const UserContext = createContext<UserContextType>({
     user: {} as User,
@@ -10,11 +10,13 @@ const UserContext = createContext<UserContextType>({
     handleUserChange: (_data: User): void => { },
     userFetchedFromLocalStorage: false,
     isLoggedIn: false,
+    logUserIn: (_data: LogUserInArgs) => { },
+    logUserOut: () => { },
 });
 export const useUserContext = () => useContext(UserContext);
 export const UserProvider: React.FC<ContextChildrenProps> = ({ children }) => {
     const [userFetchedFromLocalStorage, setUserFetchedFromLocalStorage] = useState<boolean>(false);
-    const [isLoggedIn, _setIsLoggedIn] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<User>({
         userID: '',
         username: '',
@@ -33,8 +35,7 @@ export const UserProvider: React.FC<ContextChildrenProps> = ({ children }) => {
             typeof value === 'string' && value.trim().length > 0;
 
         const validRoles = ['user', 'moderator', 'host'];
-        const areRolesValid = roles === undefined || Array.isArray(roles)
-            && roles.every(role => validRoles.includes(role));
+        const areRolesValid = roles === undefined || (Array.isArray(roles) && roles.every(role => validRoles.includes(role)));
 
         if (!isValidString(userID)) {
             console.warn('userID is not a valid string');
@@ -88,6 +89,28 @@ export const UserProvider: React.FC<ContextChildrenProps> = ({ children }) => {
         setUserFetchedFromLocalStorage(true);
     };
 
+    const logUserIn = (data: LogUserInArgs) => {
+        if (!data) return;
+
+        const { userID, username } = data;
+        if (!userID || !username) return;
+
+        handleUserChange({
+            userID,
+            username,
+            userColor: '#512da8',
+            handRaised: false,
+            roles: [],
+            createdAt: Date.now(),
+        });
+
+        setIsLoggedIn(true);
+    };
+
+    const logUserOut = () => {
+        setIsLoggedIn(false);
+    };
+
     return (
         <UserContext.Provider value={{
             user,
@@ -95,6 +118,8 @@ export const UserProvider: React.FC<ContextChildrenProps> = ({ children }) => {
             handleUserChange,
             userFetchedFromLocalStorage,
             isLoggedIn,
+            logUserIn,
+            logUserOut,
         }}>
             {children}
         </UserContext.Provider>

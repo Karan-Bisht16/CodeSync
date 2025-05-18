@@ -10,6 +10,11 @@ import {
     Container,
     IconButton,
     Stack,
+    Select,
+    MenuItem,
+    InputLabel,
+    SelectChangeEvent,
+    FormControl,
 } from '@mui/material';
 // importing icons
 import {
@@ -23,13 +28,13 @@ import { useSocketContext } from '../../../contexts/Socket.context';
 // importing components
 import { BackDrop } from '../../../components/BackDrop';
 // importing utils
-import { Room, RoomJoinPolicy } from '@codesync/shared';
+import { EditorEditPolicy, Room, RoomJoinPolicy } from '@codesync/shared';
 
 type ModeratorControl = 'all' | 'none' | 'custom';
 
 type HostControlSettings = {
     roomLock: RoomJoinPolicy;
-    editLock: boolean;
+    editLock: EditorEditPolicy;
     moderatorControl: ModeratorControl;
     allowModeratorEditLock: boolean;
     allowModeratorRoomLock: boolean;
@@ -57,7 +62,7 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
 
     const [roomSettings, setRoomSettings] = useState<HostControlSettings>({
         roomLock: room.joinPolicy,
-        editLock: false,
+        editLock: room.editPolicy,
         moderatorControl: getModeratorControl(),
         allowModeratorRoomLock: room.allowModeratorsRoomLock,
         allowModeratorEditLock: room.allowModeratorsEditLock,
@@ -70,6 +75,15 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
             return {
                 ...prevRoomSettings,
                 roomLock: checked ? 'locked' : 'open'
+            };
+        });
+    };
+
+    const handleEditLockChange = (event: SelectChangeEvent<EditorEditPolicy>) => {
+        setRoomSettings((prevRoomSettings) => {
+            return {
+                ...prevRoomSettings,
+                editLock: event.target.value as EditorEditPolicy
             };
         });
     };
@@ -103,6 +117,7 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
 
         const settings: Partial<Room> = {
             joinPolicy: roomSettings.roomLock,
+            editPolicy: roomSettings.editLock,
             allowModeratorsRoomLock: roomSettings.allowModeratorRoomLock,
             allowModeratorsEditLock: roomSettings.allowModeratorEditLock,
         };
@@ -114,7 +129,7 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
 
         setRoomSettings({
             roomLock: room.joinPolicy,
-            editLock: false,
+            editLock: room.editPolicy,
             moderatorControl: getModeratorControl(),
             allowModeratorRoomLock: room.allowModeratorsRoomLock,
             allowModeratorEditLock: room.allowModeratorsEditLock,
@@ -199,14 +214,27 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
                                     onChange={handleRoomLockChange}
                                     disabled={!user.roles?.includes('host') && !roomSettings.allowModeratorRoomLock}
                                 />
-                                <HostControlsCheckBox
-                                    label='Edit Lock'
-                                    name='editLock'
-                                    checked={roomSettings.editLock}
-                                    description='Restrict who can edit the code editor.'
-                                    onChange={handleCheckboxHostControls}
-                                    disabled={!user.roles?.includes('host') && !roomSettings.allowModeratorEditLock}
-                                />
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexGrow: 1 }}>
+                                    <Box>
+                                        <Typography>Edit Lock</Typography>
+                                        <Typography variant='subtitle1' color='text.secondary' fontSize='small'>
+                                            Restrict who can edit the code editor.
+                                        </Typography>
+                                    </Box>
+                                    <FormControl>
+                                        <InputLabel id="edit-lock-label">Edit Lock</InputLabel>
+                                        <Select<EditorEditPolicy>
+                                            labelId='edit-lock-label'
+                                            label="Edit Lock"
+                                            value={roomSettings.editLock}
+                                            onChange={handleEditLockChange}
+                                        >
+                                            <MenuItem value={'everyone'}>Everyone</MenuItem>
+                                            <MenuItem value={'host-only'}>Host Only</MenuItem>
+                                            <MenuItem value={'host-and-moderators'}>Host and Moderators</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
                             </Stack>
                             {user.roles?.includes('host') && (
                                 <>

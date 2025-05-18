@@ -24,15 +24,16 @@ export const ModeratorPermissions: RolesWithPermissions['moderator'] = {
             room.allowModeratorsRoomLock,
         'allowEditLock': (_user, room) =>
             room.allowModeratorsEditLock,
+        'edit': (_user, room) =>
+            room.editPolicy === 'everyone' ||
+            room.editPolicy === 'host-and-moderators',
     },
-    editors: {
-        'edit': (user, editor) =>
-            editor.editPolicy === 'everyone' ||
-            editor.editPolicy === 'host-and-moderators' ||
-            (editor.editPolicy === 'custom' && editor.customEditors?.includes(user.userID) === true),
-        'change-language': (user, editor) =>
-            editor.editPolicy === 'everyone' ||
-            editor.editPolicy === 'host-and-moderators' ||
-            (editor.editPolicy === 'custom' && editor.customEditors?.includes(user.userID) === true),
-    },
+    // editors: {
+    //     'edit': (_user, editor) =>
+    //         editor.editPolicy === 'everyone' ||
+    //         editor.editPolicy === 'host-and-moderators',
+    //     'change-language': (user, editor) =>
+    //         editor.editPolicy === 'everyone' ||
+    //         editor.editPolicy === 'host-and-moderators',
+    // },
 };

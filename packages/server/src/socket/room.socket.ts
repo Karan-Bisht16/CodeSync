@@ -20,7 +20,7 @@ export const handleRoomEvents = (io: Server, socket: Socket, roomStore: RoomStor
             console.log(`  🔴  ${actorUser.username} shouldn't be in room ${roomID}`)
             return;
         }
-        if (!hasPermission(actorUser, 'rooms', 'host-controls')) {
+        if (!hasPermission(actorUser, 'rooms', 'host-controls', room)) {
             console.log(`  🔴  ${actorUser.username} isn't authorized to perform host-controls operations in room ${roomID}`)
             return;
         }

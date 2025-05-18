@@ -349,6 +349,7 @@ export const EngagementPanel: React.FC = () => {
                     boxSizing: 'border-box',
                     borderLeft: '1px solid',
                     borderColor: 'divider',
+                    zIndex: (theme) => theme.zIndex.appBar - 1,
                 },
             }}
         >

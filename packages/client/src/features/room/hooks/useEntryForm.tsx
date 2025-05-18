@@ -21,7 +21,7 @@ export const useEntryForm = ({ fetchedRoomID, to }: EntryFormProps) => {
 
     const { isMobile } = useMobileContext();
     const { openSnackBar } = useSnackBarContext();
-    const { handleUserChange } = useUserContext();
+    const { handleUserChange, isLoggedIn, user } = useUserContext();
 
     const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ export const useEntryForm = ({ fetchedRoomID, to }: EntryFormProps) => {
     const roomIDFieldRef = useRef<HTMLInputElement>(null);
 
     const [formData, setFormData] = useState({
-        username: '',
+        username: isLoggedIn ? user.username : '',
         roomID: fetchedRoomID || '',
     });
 

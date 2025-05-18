@@ -18,15 +18,18 @@ type CustomSelectProps = {
     list: { value: string, label: string }[],
     label?: string,
     maxHeight?: string | number,
+    disabled?: boolean,
 };
 
 export const CustomSelect: React.FC<CustomSelectProps> = (props) => {
-    const { id, name, value, onChange, list, maxHeight = 300, label } = props;
+    const { id, name, value, onChange, list, label, maxHeight = 300, disabled = false } = props;
 
     const [searchQuery, setSearchQuery] = useState('');
     const filteredList = list.filter((item) =>
         item.label.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    const isValueInFilteredList = filteredList.some(item => item.value === value);
 
     return (
         <FormControl fullWidth size='small'>
@@ -46,6 +49,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = (props) => {
                     disablePortal: true,
                     MenuListProps: { autoFocusItem: false },
                 }}
+                disabled={disabled}
             >
                 <ListSubheader sx={{ bgcolor: 'inherit' }}>
                     <TextField
@@ -59,6 +63,12 @@ export const CustomSelect: React.FC<CustomSelectProps> = (props) => {
                         sx={{ bgcolor: 'action.hover' }}
                     />
                 </ListSubheader>
+
+                {!isValueInFilteredList && (
+                    <MenuItem value={value} style={{ display: 'none' }}>
+                        {value}
+                    </MenuItem>
+                )}
 
                 {filteredList.map(({ value, label }, index) => (
                     <MenuItem key={index} value={value}>

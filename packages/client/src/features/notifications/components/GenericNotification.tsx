@@ -31,7 +31,7 @@ export const GenericNotification: React.FC<GenericNotificationProps> = (props) =
     const { transitionDuration } = constantsJSON;
 
     return (
-        <Box sx={{ position: 'fixed', top: 80, right: 20, zIndex: 1000, maxWidth, pointerEvents: 'none' }}>
+        <Box sx={{ position: 'fixed', top: 80, right: 20, zIndex: 200, maxWidth, pointerEvents: 'none' }}>
             <Slide
                 timeout={transitionDuration}
                 direction='left'

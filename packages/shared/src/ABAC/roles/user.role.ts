@@ -7,16 +7,13 @@ export const UserPermissions: RolesWithPermissions['user'] = {
     },
     rooms: {
         'join': (user, room) =>
-            (room.joinPolicy !== 'locked' || user.admittedRooms?.includes(room.roomID) === true) &&
+            user.admittedRooms?.includes(room.roomID) === true &&
             !user.blockedBy?.some((block) => block.hostID === room.hostID && block.roomID === room.roomID),
         'leave': true,
+        'edit': (_user, room) => room.editPolicy === 'everyone',
     },
-    editors: {
-        'edit': (user, editor) =>
-            editor.editPolicy === 'everyone' ||
-            (editor.editPolicy === 'custom' && editor.customEditors?.includes(user.userID) === true),
-        'change-language': (user, editor) =>
-            editor.editPolicy === 'everyone' ||
-            (editor.editPolicy === 'custom' && editor.customEditors?.includes(user.userID) === true),
-    },
+    // editors: {
+    //     'edit': (_user, editor) => editor.editPolicy === 'everyone',
+    //     'change-language': (user, editor) => editor.editPolicy === 'everyone',
+    // },
 };

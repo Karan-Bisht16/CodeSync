@@ -46,7 +46,7 @@ export const Collaborators: React.FC<CollaboratorsProps> = (props) => {
                 position: 'fixed',
                 top: `${position.y}px`,
                 left: `${position.x}px`,
-                zIndex: 10000,
+                zIndex: 200,
                 color: 'text.primary',
                 bgcolor: 'background.paper',
                 borderRadius: '8px',

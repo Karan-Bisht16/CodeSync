@@ -20,9 +20,10 @@ export const HostPermissions: RolesWithPermissions['host'] = {
         'host-controls': true,
         'allowRoomLock': true,
         'allowEditLock': true,
-    },
-    editors: {
         'edit': true,
-        'change-language': true,
     },
+    // editors: {
+    //     'edit': true,
+    //     'change-language': true,
+    // },
 };

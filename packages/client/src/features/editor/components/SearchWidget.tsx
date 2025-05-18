@@ -14,7 +14,7 @@ import {
 import { EditorView } from '@uiw/react-codemirror';
 // importing data
 import { constantsJSON } from '../../../data/constants.data';
-// importing type
+// importing types
 import type { Panel } from '@uiw/react-codemirror';
 // importing providers
 import { ColorProvider } from '../../../contexts/Color.context';

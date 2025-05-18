@@ -2,7 +2,7 @@ import { scroller } from 'react-scroll';
 // importing data
 import { constantsJSON } from '../data/constants.data';
 
-const isDev = import.meta.env.MODE === 'DEVELOPMENT';
+const isDev = import.meta.env.VITE_MODE === 'DEVELOPMENT';
 
 export const log = (...args: any[]) => {
     if (isDev) { console.log(...args) }

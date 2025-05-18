@@ -13,7 +13,7 @@ export type User = {
     createdAt: number,
     roles: Role[],
     admittedRooms?: string[];
-    
+
     // To be implemented in future
     blockedBy?: BlockEntry[]
 };
@@ -32,11 +32,15 @@ export type Message = {
 };
 
 export type RoomJoinPolicy = 'open' | 'locked';
+export type EditorEditPolicy = 'everyone' | 'host-only' | 'host-and-moderators';
 
 export type Room = {
     roomID: string;
     hostID: string;
     joinPolicy: RoomJoinPolicy;
+    // This should be a editor property but given the time constraints and the fact the their exists a one-to-one 
+    // relation between room and editor (at the moment) thus I'm moving this property to room
+    editPolicy: EditorEditPolicy;
     createdAt: number;
     allowModeratorsRoomLock: boolean;
     allowModeratorsEditLock: boolean;
@@ -46,20 +50,18 @@ export type Room = {
     isArchived?: boolean;
 };
 
-export type EditorEditPolicy = 'everyone' | 'host-only' | 'host-and-moderators' | 'custom';
-
 export type EditorLanguage = {
     languageNumber: string,
     value: string,
     label: string,
     version: string,
     extension: string,
-    boilerPlateCode?: string,
+    boilerPlateCode: string,
+    prettierSupport?: boolean,
 };
 
 export type Editor = {
     language: EditorLanguage;
-    editPolicy: EditorEditPolicy;
     customEditors?: string[];
 
     // To be implemented in future
@@ -76,6 +78,6 @@ export type Editor = {
 // To be implemented in future
 export type Whiteboard = {
     roomID: string;
-    editPolicy: 'everyone' | 'host-only' | 'host-and-moderators' | 'custom';
+    editPolicy: 'everyone' | 'host-only' | 'host-and-moderators';
     customEditors?: string[];
 };

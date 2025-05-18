@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Navigate, Link as NavigateLink, useNavigate, useParams } from 'react-router-dom';
+import _ from 'lodash';
 import {
     AppBar,
     Box,
@@ -10,12 +11,14 @@ import {
 // importing icons
 import {
     ContentCopyOutlined as CopyRoomIDIcon,
+    Info,
     PlayArrow as RunCodeIcon,
     Save as SaveIcon,
 } from '@mui/icons-material';
 // importing data
 import { constantsJSON } from '../data/constants.data';
 // importing features
+import { useAuthContext } from '../features/auth';
 import { DynamicPanel } from '../features/dynamicPanel';
 import {
     ActivityDock,
@@ -37,7 +40,6 @@ import { useSettingsContext } from '../features/settings';
 import { TerminalPanel } from '../features/terminalPanel';
 import { useUserContext } from '../features/user';
 // importing contexts
-import { useAuthContext } from '../contexts/Auth.context';
 import { useColorContext } from '../contexts/Color.context';
 import { useMobileContext } from '../contexts/Mobile.context';
 import { useModalContext } from '../contexts/Modal.context';
@@ -53,11 +55,12 @@ import { LoadingModal } from '../components/LoadingModal';
 import { Logo } from '../components/Logo';
 import { ToolTip } from '../components/ToolTip';
 // importing utils
-import { hasPermission } from '@codesync/shared';
+import { EditorLanguage, editorLanguages, hasPermission } from '@codesync/shared';
 import { linkTo } from '../utils/helpers.util';
+import { LanguageInfoModal } from '../features/editor/components/LanguageInfo';
 
 export const Editor: React.FC = () => {
-    const { activityDockWidth, dynamicPanelWidth, navbarHeight, terminalPanelHeight, languages } = constantsJSON;
+    const { activityDockWidth, dynamicPanelWidth, navbarHeight, terminalPanelHeight } = constantsJSON;
 
     const { openAuthModal } = useAuthContext();
     const { palette, theme } = useColorContext();
@@ -175,6 +178,21 @@ export const Editor: React.FC = () => {
         setRunningCode(false);
     };
 
+    const [languageInfoModal, setLangugaeModal] = useState<EditorLanguage | false>(false);
+
+    const openLangugageModal = (language: EditorLanguage) => {
+        setLangugaeModal((prevLanguage) => {
+            if (_.isEqual(language, prevLanguage)) {
+                return false;
+            }
+            return language;
+        });
+    };
+
+    const closeLangugageModal = () => {
+        setLangugaeModal(false);
+    };
+
     useEffect(() => {
         if (!isValidUser(user) || !roomID || !socket?.connected || hasJoined) return;
 
@@ -229,13 +247,13 @@ export const Editor: React.FC = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', color: 'text.primary', bgcolor: 'background.default' }}>
             <AppBar
-                position='static'
+                position='relative'
                 elevation={0}
                 sx={{
                     bgcolor: 'background.paper',
                     borderBottom: '1px solid',
                     borderColor: 'divider',
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                    zIndex: (theme) => theme.zIndex.appBar,
                 }}
             >
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', height: navbarHeight }}>
@@ -259,16 +277,27 @@ export const Editor: React.FC = () => {
                         </NavigateLink>
 
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 }, ml: { xs: 1, md: 2 } }}>
-                            <ToolTip title='Language'>
-                                <CustomSelect
-                                    id='language'
-                                    name='editorLanguage'
-                                    value={editor.language.value}
-                                    onChange={handleEditorLanguageChange}
-                                    list={languages}
-                                    label={editor.language.version}
-                                />
-                            </ToolTip>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <ToolTip title='Language'>
+                                    <CustomSelect
+                                        id='language'
+                                        name='editorLanguage'
+                                        value={editor.language.value}
+                                        onChange={handleEditorLanguageChange}
+                                        list={editorLanguages}
+                                        label={editor.language.version}
+                                        disabled={!hasPermission(user, 'rooms', 'edit', room)}
+                                    />
+                                </ToolTip>
+                                <Box sx={{ position: 'relative' }}>
+                                    <ToolTip title='Language Info'>
+                                        <IconButton size='small' onClick={() => openLangugageModal(editor.language)}>
+                                            <Info fontSize='small' />
+                                        </IconButton>
+                                    </ToolTip>
+                                    <LanguageInfoModal open={languageInfoModal} onClose={closeLangugageModal} />
+                                </Box>
+                            </Box>
                             {!isMobile &&
                                 <ToolTip title='Copy Room ID'>
                                     <Button

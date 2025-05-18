@@ -1,4 +1,4 @@
-// importing provider and contexts
+// importing provider and context
 import { RoomProvider, useRoomContext } from './contexts/Room.context';
 // importing components
 import { EntryForm } from './components/EntryForm';

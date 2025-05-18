@@ -2,12 +2,9 @@ import React, { createContext, useCallback, useContext, useEffect, useRef, useSt
 import { useNavigate } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
 import { debounce } from 'lodash';
-// importing data
-import { constantsJSON } from '../data/constants.data';
 // importing types
 import type { ApiResponse } from '../types/API.types';
 import type { Message, SocketUser } from '@codesync/shared';
-import type { RemotePeerState } from '../utils/remoteCaret.utils';
 import type { ContextChildrenProps } from '../types/Context.types';
 import type {
     AssignRoleArgs,
@@ -34,16 +31,23 @@ import type {
     UserKickedEvent,
 } from '../types/Socket.types';
 // importing features
-import { executeCode, formatCode, useEditorContext } from '../features/editor';
+import {
+    executeCode,
+    formatCode,
+    getDocument,
+    RemotePeerState,
+    setRemotePeersEffect,
+    updateRemotePeerEffect,
+    useEditorContext
+} from '../features/editor';
 import { useRoomContext } from '../features/room';
 import { useUserContext } from '../features/user';
 // importing contexts
 import { useModalContext } from './Modal.context';
 import { useSnackBarContext } from './SnackBar.context';
 // importing utils
-import { getDocument } from '../utils/collab.utils';
+import { editorLanguages } from '@codesync/shared';
 import { formattedString } from '../utils/helpers.util';
-import { setRemotePeersEffect, updateRemotePeerEffect } from '../utils/remoteCaret.utils';
 
 const SocketContext = createContext<SocketContextType>({
     socket: null,
@@ -73,8 +77,6 @@ const SocketContext = createContext<SocketContextType>({
 });
 export const useSocketContext = () => useContext(SocketContext);
 export const SocketProvider: React.FC<ContextChildrenProps> = ({ children }) => {
-    const { languages } = constantsJSON;
-
     const { openModal } = useModalContext();
     const { openSnackBar } = useSnackBarContext();
     const { user, isValidUser, handleUserChange } = useUserContext();
@@ -784,7 +786,7 @@ export const SocketProvider: React.FC<ContextChildrenProps> = ({ children }) => 
         }
 
         return code;
-    }, [editor.language, languages, isSetupComplete, openSnackBar]);
+    }, [editor.language, editorLanguages, isSetupComplete, openSnackBar]);
 
     // Function to download code
     const downloadCode = () => {

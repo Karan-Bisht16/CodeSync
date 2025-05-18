@@ -7,9 +7,9 @@ import { constantsJSON } from '../../../data/constants.data';
 // importing types
 import type { ReactNode } from 'react';
 // importing features
+import { useAuthContext } from '../../auth';
 import { useUserContext } from '../../user';
 // importing contexts
-import { useAuthContext } from '../../../contexts/Auth.context';
 import { usePanelContext } from '../../../contexts/Panel.context';
 
 type DynamicPanelContainerProps = {
@@ -45,9 +45,9 @@ const DynamicPanelContainer: React.FC<DynamicPanelContainerProps> = (props) => {
 };
 
 export const DynamicPanel: React.FC = () => {
+    const { openAuthModal } = useAuthContext();
     const { dynamicPanel } = usePanelContext();
     const { isLoggedIn } = useUserContext();
-    const { openAuthModal } = useAuthContext();
 
     if (!isLoggedIn) {
         return (

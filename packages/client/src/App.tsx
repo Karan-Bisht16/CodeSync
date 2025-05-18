@@ -17,6 +17,7 @@ import { useSnackBarContext } from './contexts/SnackBar.context';
 // importing pages
 import { Editor } from './pages/Editor.page';
 import { Home } from './pages/Home.page';
+import { Profile } from './pages/Profile.page';
 import { Room } from './pages/Room.page';
 import { Whiteboard } from './pages/Whiteboard.page';
 // importing layout components
@@ -56,6 +57,7 @@ const App: React.FC = () => {
                     }
                 />
                 <Route path='/whiteboard/:roomID' element={<Whiteboard />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path='*' element={<Navigate to='/' />} />
             </Routes>
             <Footer />

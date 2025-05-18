@@ -7,10 +7,12 @@
     "description": "[ADD]",
     "scripts": {
         "build": "npm run build --w packages/shared && npm run build --w packages/server && npm run build --w packages/client",
-        "dev": "npm run dev --w packages/shared && npm run dev --w packages/server && npm run dev --w packages/client",
+        "dev:client": "npm run dev --w packages/client",
+        "dev:server": "npm run dev --w packages/server",
+        "dev:shared": "npm run dev --w packages/shared",
         "build:client": "npm run build --w packages/shared && npm run build --w packages/client",
         "build:server": "npm install --w packages/server && npm run build --w packages/shared && npm run build --w packages/server",
-        "start:client": "",
+        "start:client": "npm run dev --w packages/client",
         "start:server": "node packages/server/dist/server/src/index.js"
     },
     "workspaces": [
@@ -27,7 +29,5 @@
     "devDependencies": {
         "typescript": "^5.8.3"
     },
-    "dependencies": {
-        "uuid": "^11.1.0"
-    }
+    "dependencies": {}
 }

@@ -15,7 +15,7 @@ import { handleSessionEvents } from './socket/session.socket.js';
 
 const server = http.createServer(app);
 const io = configureSocketIO(server);
-
+ 
 const roomStore = new RoomStore();
 
 // TODO: should do isValidUser, isValidRoom in every event

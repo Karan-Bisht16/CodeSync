@@ -24,7 +24,7 @@ export const BackDrop: React.FC<BackDropProps> = (props) => {
                 width: '100vw',
                 position: 'fixed',
                 inset: 0,
-                zIndex: 10000,
+                zIndex: 200,
                 bgcolor: 'rgba(0, 0, 0, 0.9)',
             }}
         >

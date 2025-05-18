@@ -4,10 +4,12 @@ import { Grid, IconButton, Typography } from '@mui/material';
 import {
     Close as CloseIcon,
 } from '@mui/icons-material';
+// importing features
+import { useUserContext } from '../../user';
 // importing contexts
 import { useAuthContext } from '../contexts/Auth.context';
 // importing components
-import { BackDrop } from './BackDrop';
+import { BackDrop } from '../../../components/BackDrop';
 import { Login } from './Login';
 import { Register } from './Register';
 // importing assets
@@ -51,8 +53,9 @@ const AuthBackground: React.FC<AuthBackgroundProps> = (props) => {
 
 export const AuthModal: React.FC = () => {
     const { authModal, closeAuthModal } = useAuthContext();
+    const { isLoggedIn } = useUserContext();
 
-    if (!authModal) {
+    if (!authModal || isLoggedIn) {
         return null;
     }
 

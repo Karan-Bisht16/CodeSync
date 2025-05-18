@@ -1,5 +1,5 @@
 // importing types
-import type { User } from '../types/core.js';
+import type { User } from '../../types/core.js';
 import type { Permissions } from '../types/permissions.js';
 // importing roles
 import { ROLES } from '../roles/index.js';

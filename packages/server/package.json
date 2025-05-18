@@ -8,8 +8,7 @@
     "scripts": {
         "build": "tsc --project tsconfig.json",
         "dev": "nodemon",
-        "start": "node dist/server/src/index.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "start": "node dist/server/src/index.js"
     },
     "author": "Karan_Bisht16",
     "license": "ISC",

@@ -1,5 +1,6 @@
 // importing types
-import { Editor, Role, Room, User } from './core.js';
+import { Editor, Role, Room, User } from "../../types/core.js";
+
 
 export type PermissionCheck<Key extends keyof Permissions> =
     | boolean
@@ -12,7 +13,7 @@ export type Permissions = {
     },
     rooms: {
         dataType: Room,
-        action: 'join' | 'lock' | 'leave' | 'kick' | 'assign-role' | 'host-controls' | 'allowRoomLock' | 'allowEditLock' | 'archive',
+        action: 'join' | 'lock' | 'leave' | 'kick' | 'assign-role' | 'host-controls' | 'edit' | 'allowRoomLock' | 'allowEditLock' | 'archive',
     },
     editors: {
         dataType: Editor,

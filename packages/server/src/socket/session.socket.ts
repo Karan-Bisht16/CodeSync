@@ -29,6 +29,7 @@ export const handleSessionEvents = (io: Server, socket: Socket, roomStore: RoomS
             roomID,
             hostID: userSocketID,
             joinPolicy: 'open',
+            editPolicy: 'everyone',
             createdAt: Date.now(),
             allowModeratorsRoomLock: false,
             allowModeratorsEditLock: false,
@@ -45,11 +46,21 @@ export const handleSessionEvents = (io: Server, socket: Socket, roomStore: RoomS
 
             // if previously the user had the role of host then admit them without permission
             if (previousRoles?.includes('host')) {
-                const lastHostID = room.hostID;
-                const lastHost = roomStore.getUser(lastHostID);
-                if (lastHost) {
-                    lastHost.roles = lastHost.roles.filter((role) => {
+                const previousHostID = room.hostID;
+                const previousHost = roomStore.getUser(previousHostID);
+                if (previousHost) {
+                    previousHost.roles = previousHost.roles.filter((role) => {
                         return role !== 'host';
+                    });
+                    // remove the role of 'host' from previous host
+                    roomStore.updateUser(previousHostID, { roles: previousHost.roles });
+
+                    const participants = roomStore.getParticipants(roomID);
+                    // emit event regarding no longer host 
+                    io.to(previousHostID).emit('ROLE_CHANGED', {
+                        newUser: previousHost,
+                        updatedParticipants: participants,
+                        personalMessage: `You are no longer the host`,
                     });
                 }
 

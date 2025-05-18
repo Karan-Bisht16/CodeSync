@@ -1,4 +1,4 @@
-// importing provider and contexts
+// importing provider and context
 import { SettingsContext, SettingsProvider, useSettingsContext } from './contexts/Settings.context';
 // importing components
 import { Settings } from './components/Settings';

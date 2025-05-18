@@ -31,7 +31,6 @@ export const Modal: React.FC<ModalProps> = (props) => {
                 !isPersistent && handleDialogClose();
             }}
             open={modalState}
-            sx={{ zIndex: 100000 }}
         >
             <DialogTitle sx={{ m: 0, p: 2 }}>
                 {title}

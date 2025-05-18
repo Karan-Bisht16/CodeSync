@@ -9,9 +9,11 @@ import { CustomSelect } from '../../../components/CustomSelect';
 import { SectionHeading } from './SectionHeading';
 import { SectionSubHeading } from './SectionSubHeading';
 import { SettingsCheckBox } from './SettingsCheckBox';
+// importing utils
+import { editorLanguages } from '@codesync/shared';
 
 export const EditorSettings: React.FC = () => {
-    const { editorThemes, languages } = constantsJSON;
+    const { editorThemes } = constantsJSON;
 
     const { settings, updateSelectSettings, updateSliderSettings } = useSettingsContext();
 
@@ -25,7 +27,7 @@ export const EditorSettings: React.FC = () => {
                     name='editorDefaultLanguage'
                     value={settings.editorDefaultLanguage}
                     onChange={updateSelectSettings}
-                    list={languages}
+                    list={editorLanguages}
                 />
             </Box>
 
