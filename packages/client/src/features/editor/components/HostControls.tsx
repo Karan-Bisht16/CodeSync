@@ -213,7 +213,7 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
                                     description='Prevent new users from joining the room.'
                                     onChange={handleRoomLockChange}
                                     disabled={!user.roles?.includes('host') && !roomSettings.allowModeratorRoomLock}
-                                />
+                                    />
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexGrow: 1 }}>
                                     <Box>
                                         <Typography>Edit Lock</Typography>
@@ -228,6 +228,7 @@ export const HostControls: React.FC<HostControlsProps> = (props) => {
                                             label="Edit Lock"
                                             value={roomSettings.editLock}
                                             onChange={handleEditLockChange}
+                                            disabled={!user.roles?.includes('host') && !roomSettings.allowModeratorEditLock}
                                         >
                                             <MenuItem value={'everyone'}>Everyone</MenuItem>
                                             <MenuItem value={'host-only'}>Host Only</MenuItem>
