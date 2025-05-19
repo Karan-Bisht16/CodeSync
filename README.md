@@ -68,9 +68,6 @@ Objective of the Real-time Code Collaboration Platform is to create an interacti
 2. User authentication and management implemented using Firebase
 3. Settings for Customization like themes, editor preferences and notificatons etc
 4. Modern, Responsive UI
-5. A basic prototype with a responsive and modern UI.
-6. Data modeling for rooms and users.
-7. Implemented Socket.IO for code synchronization and chat functionalities:
 
 **Features to be Implemented in the Future:**
 
