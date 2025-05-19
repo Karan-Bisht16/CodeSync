@@ -10,7 +10,7 @@ A real-time code collaboration tool powered by the MERN stack and Socket.IO.
 - [Tech Stack](#tech-stack)
 - [System Design Overview](#system-design-overview)
 - [Real world applications](#real-world-applications)
-<!-- - [Usage](#usage) -->
+- [Team](#team)
 
 ## Problem Statement
 
@@ -18,77 +18,108 @@ In today's digital learning environment, real-time collaboration on coding tasks
 
 ## Aim/Objective:
 
-objective of the Real-time Code Collaboration Platform is to create an interactive and user-friendly environment where multiple participants can collaboratively write, edit, and debug code in real-time. By offering a shared code editor, integrated console, and a collaborative whiteboard, the platform aims to enhance the coding and learning experience for educational institutions, coding bootcamps, and casual coding groups.
+Objective of the Real-time Code Collaboration Platform is to create an interactive and user-friendly environment where multiple participants can collaboratively write, edit, and debug code in real-time. By offering a shared code editor, integrated console, and a collaborative whiteboard, the platform aims to enhance the coding and learning experience for educational institutions, coding bootcamps, and casual coding groups.
 
 ## Features
 
 **Features implemented so far:**
-1. A basic prototype with a responsive and modern UI.
-2. Data modeling for rooms and users.
-3. Implemented Socket.IO for code synchronization and chat functionalities:
+
+1. Real-time Collaboration via Socket.IO:
 <ul type='none'>
     <li>
-        3.1 A shared code editor (using codemirror) allowing users to write,edit, and view code collectively. Code editors features:
+        1.1 Shared code editor:
         <ul type='none'>
             <li>
-                3.1.1 Real-time code synchronization
+                1.1.1 Real-time code synchronization (using @codemirror/collab)
             </li>
             <li>
-                3.1.2 Multiple programming languages (Java, C++, Python, JavaScript, TypeScript, etc)
+                1.1.2 Supports multiple languages: Java, C++, Python, JS, TS, etc [14 at the moment]
             </li>
             <li>
-                3.1.3 Console for immediate code execution (using code-compiler api)
+                1.1.3 In-browser console for instant code execution (using Code Compiler API)
+            </li>
+            <li>
+                1.1.4 Prettier integration for code formatting
             </li>
         </ul>
     </li>
     <li>
-        3.2 Whiteboard (using tldraw): For visual explanations.
+        1.2 Collaborative Whiteboard (tldraw): For visual explanations
     </li>
     <li>
-        3.3 Chat: For easy in app communication.
+        1.3 Live Chat: For seamless in-app communication.
+    </li>
+    <li>
+        1.4 Participant Management: Role-based access (using ABAC)
+    </li>
+    <li>
+        1.5 Host controls: For room management
+        <ul type='none'>
+            <li>
+                1.5.1 Room Lock: Limit who can join
+            </li>
+            <li>
+                1.5.2 Edit Lock: Restrict who can edit the code
+            </li>
+        </ul>
     </li>
 </ul>
 
-4. Server setup and deployment on Render.<br/><br/>
+2. User authentication and management implemented using Firebase
+3. Settings for Customization like themes, editor preferences and notificatons etc
+4. Modern, Responsive UI
+5. A basic prototype with a responsive and modern UI.
+6. Data modeling for rooms and users.
+7. Implemented Socket.IO for code synchronization and chat functionalities:
 
 **Features to be Implemented in the Future:**
-- **Persistent Storage:** Permanent code storage in MongoDB with user Authentication.
-- **Screen Lock:** The room creator will be able to lock the screen, allowing only them to edit the code while others can only view.
-- **Room Lock:** Lock the number of participants, with a premium feature for more than 50 participants.
+
+- **Multi-File System:** Allows users to create and manage multiple files within a room.
+- **Advanced Chat Options:** Enable sending media such as images and PDFs, with the ability to store them in the cloud.
+- **Audio and Video Integration:** Use WebRTC to support audio/video streaming and screen sharing for improved communication and collaboration.
 
 ## Tech Stack
 
 - **Frontend:**
-    - **React:** For easy development of component-based websites.
-    - **Tailwind CSS:** For styling.
-        - **Why Tailwind CSS?** Offers flexibility, PurgeCSS, and faster development.
+  - **React + Vite:** For building fast, component-based websites.
+  - **Tailwind CSS + Material UI:** For modern and responsive styling.
+  - **TypeScript:** For type safety and better developer experience
+
 - **Backend:**
-    - **Node with Express:** To build the server-side of the application.
-    - **Socket.IO:** Enables real-time, two-way communication between a client and a server.
+  - **Node with Express (in TS):** To build and manage the server-side logic.
+  - **Socket.IO:** Enables real-time, two-way communication between client and server via WebSockets.
+
 - **Deployment:**
-    - **Frontend:** Vercel
-    - **Backend:** Render
-        - **Why different services?** Vercel is a serverless service, meaning it is stateless and event-driven, making it unsuitable for maintaining persistent connections like WebSockets. Render is used for the backend to maintain socket connections.
+  - **Frontend:** Vercel
+  - **Backend:** Render
+    - **Why different services?** Vercel is a serverless platform, which is stateless and event-driven, making it unsuitable for persistent WebSocket connections. Therefore, the backend is deployed on Render.
 
 - **Other Tools and Technologies Used:**
-    - [**tldraw**](https://tldraw.dev/): Used to implement a synchronous canvas for collaborative whiteboards.
-    - [**CodeMirror**](https://codemirror.net/): A code editor component for the web, supporting various editing features with a rich programming interface.
-    - [**Code Compiler API**](https://rapidapi.com/abdheshnayak/api/code-compiler): A RESTful API used to execute code, supporting 37 languages with robust error handling.
-    
+  - [**tldraw**](https://tldraw.dev/)**:** For implementing collaborative whiteboard.
+  - [**CodeMirror**](https://codemirror.net/)**:** Used as the in-browser code editor. @codemirror/collab enables operational transformation for syncing multiple edits.
+  - [**Code Compiler API**](https://rapidapi.com/abdheshnayak/api/code-compiler)**:** RESTful API used to execute code snippets.
+  - **Attribute-Based Access Control (ABAC):** Implements roles such as user, moderator, and host for effective room moderation. Based on the [Web Dev Simplified - How To Handle Permissions Like A Senior Dev](https://youtu.be/5GG-VUvruzE?si=NTVrL44oXBznGtKX) video.
+  - [**Firebase**](https://firebase.google.com/docs/auth)**:** Used for authentication due to its ease of integration with multiple providers (Google, Facebook, GitHub, Email/Password). 
 
 ## System Design Overview
 
-[CodeSync ER Diagram and Technical Architecture](https://app.eraser.io/workspace/ewHbT6LRwZ1UOKbTdjaM?origin=share)
+[CodeSync ER Diagram and Technical Architecture](https://app.eraser.io/workspace/ewHbT6LRwZ1UOKbTdjaM)
 
 ## Real world applications
 
 1. **Enhanced Learning Experience:**
-   Allows instructors and students to code together in real-time. Ideal for educational institutions, coding bootcamps, and peer study groups.
+   Facilitates real-time collaborative coding for students and instructors. Ideal for schools, bootcamps, and peer study groups.
 2. **Debugging and understanding:**
-   Helps user debug code collectively to understand the impact of their code changes.
+   Helps users debug and understand the effects of code changes together.
 3. **Remote Accessibility:**
-   As a web-based platform, it can be accessed from anywhere, making it suitable for remote learning and distributed teams.<br />
+   Being web-based, it’s accessible from anywhere.<br />
    Easy setup, no sign-up or download required.
 4. **Practical Use Cases:**
-   Suitable for conducting coding interviews, live coding sessions, and pair programming exercises.<br />
-   It can also be used for collaborative coding competitions or hackathons, where real-time coordination is key.
+   Useful for coding interviews, live sessions, pair programming, and collaborative hackathons where coordination is critical.
+
+## Team
+
+  - [**Karan**](https://github.com/Karan-Bisht16)**:** Mainly handled deployment and ABAC. Also contributed to both frontend and backend development.
+  - [**Raj**](https://github.com/rkchaos/)**:** Implemented a secure and scalable backend, contributed to the Socket.IO integration, and implemented the tldraw whiteboard and Firebase on the client side.
+  - [**Ayush**](https://github.com/ayushgitt)**:** Primarily focused on ideation and research of similar software and their shortcomings. Also evaluated feasibility and contributed to frontend development.
+  - [**Yashika**](https://github.com/Yashika1711)**:** Primarily worked on UI and proposed new and relevant features.
